@@ -349,4 +349,10 @@ public class ExtendedActions extends Actions {
 		action.setSprite(sprite);
 		return action;
 	}
+
+	public static Action send_to_pc(Sprite sprite) {
+		SendToPcAction action = action(SendToPcAction.class);
+		action.setSprite(sprite);
+		return action;
+	}
 }
