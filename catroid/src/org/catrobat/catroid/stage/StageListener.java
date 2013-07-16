@@ -534,6 +534,10 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	public void skipDynamicSamplingRateForActions() {
+		deltaActionTimeDivisor = 1.0f;
+	}
+
 	private void prepareAutomaticScreenshotAndNoMeadiaFile() {
 		File noMediaFile = new File(pathForScreenshot + Constants.NO_MEDIA_FILE);
 		File screenshotAutomaticFile = new File(pathForScreenshot + SCREENSHOT_AUTOMATIC_FILE_NAME);
