@@ -45,6 +45,7 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.WhenScript;
 import org.catrobat.catroid.content.XmlHeader;
+import org.catrobat.catroid.content.bricks.AskBrick;
 import org.catrobat.catroid.content.bricks.BrickBaseType;
 import org.catrobat.catroid.content.bricks.BroadcastBrick;
 import org.catrobat.catroid.content.bricks.BroadcastReceiverBrick;
@@ -62,6 +63,7 @@ import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.GlideToBrick;
 import org.catrobat.catroid.content.bricks.GoNStepsBackBrick;
 import org.catrobat.catroid.content.bricks.HideBrick;
+import org.catrobat.catroid.content.bricks.IfAnswerLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfLogicElseBrick;
 import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
@@ -158,6 +160,7 @@ public class StorageHandler {
 
 		xstream.aliasField("object", BrickBaseType.class, "sprite");
 
+		xstream.alias("askBrick", AskBrick.class);
 		xstream.alias("broadcastBrick", BroadcastBrick.class);
 		xstream.alias("broadcastReceiverBrick", BroadcastReceiverBrick.class);
 		xstream.alias("broadcastWaitBrick", BroadcastWaitBrick.class);
@@ -174,6 +177,7 @@ public class StorageHandler {
 		xstream.alias("glideToBrick", GlideToBrick.class);
 		xstream.alias("goNStepsBackBrick", GoNStepsBackBrick.class);
 		xstream.alias("hideBrick", HideBrick.class);
+		xstream.alias("ifAnswerIsBrick", IfAnswerLogicBeginBrick.class);
 		xstream.alias("ifLogicBeginBrick", IfLogicBeginBrick.class);
 		xstream.alias("ifLogicElseBrick", IfLogicElseBrick.class);
 		xstream.alias("ifLogicEndBrick", IfLogicEndBrick.class);

@@ -218,7 +218,7 @@
     <string name="new_project_dialog_hint">Mein Programm</string>
     <string name="new_project_description_dialog_hint">Meine Beschreibung</string>
     <string name="new_project_name">Programmname:</string>
-    <string name="new_project_empty">Erstelle leeres Progamm</string>
+    <string name="new_project_empty">Erstelle leeres Programm</string>
     <!--  -->
 
 
@@ -362,6 +362,8 @@
     <string name="brick_note">Notiz</string>
     <string name="brick_forever">Wiederhole fortlaufend</string>
     <string name="brick_repeat">Wiederhole</string>
+    <string name="brick_ask_pre">Frage</string>
+    <string name="brick_ask_post">und warte</string>
 
     <plurals name="time_plural">
         <item quantity="one">mal</item>
@@ -375,8 +377,11 @@
     <string name="brick_if_end">sonst Ende</string>
     <string name="brick_set_variable">Setze Variable</string>
     <string name="brick_change_variable">Ändere Variable</string>
+    <string name="brick_if_answer_begin">Wenn Antwort </string>
+    <string name="brick_if_answer_begin_second_part">ist, dann</string>
     <string name="brick_variable_spinner_create_new_variable">Neu…</string>
     <string name="brick_note_default_value">"Anmerkung hier hinzufügen…" </string>
+    <string name="brick_ask_default_value">Wie ist dein Name?</string>
     <string name="brick_broadcast_default_value">"Nachricht 1"</string>
     <!--  -->
 

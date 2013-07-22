@@ -89,5 +89,6 @@ public class AskActionTest extends AndroidTestCase {
 		}
 
 		assertEquals("Simple AskAction wait failed", testPosition, (int) sprite.look.getXInUserInterfaceDimensionUnit());
+		Reflection.setPrivateField(UtilSpeechRecognition.class, "instance", null);
 	}
 }
