@@ -131,7 +131,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public Brick clone() {
-		return new SendEndBrick(getSprite(), getSendBeginBrick(), sendBrick);
+		return new SendToPcBrick(getSprite());
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		sequence.addAction(ExtendedActions.sendEnd(sprite));
+		sequence.addAction(ExtendedActions.sendEnd(sprite, sendBeginBrick));
 		return null;
 	}
 }

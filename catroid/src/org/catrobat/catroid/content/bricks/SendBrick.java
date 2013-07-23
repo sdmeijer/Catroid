@@ -35,10 +35,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -86,6 +89,10 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
 		if (animationState) {
 			return view;
+		}
+
+		if (command == 0) {
+			command = letter;
 		}
 
 		view = View.inflate(context, R.layout.brick_send, null);
@@ -189,6 +196,31 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 			public void onDismiss(DialogInterface dialog) {
 				super.onDismiss(dialog);
 			}
+
+			@Override
+			protected boolean getPositiveButtonEnabled() {
+				return true;
+			}
+
+			@Override
+			protected TextWatcher getInputTextChangedListener(Button buttonPositive) {
+				return new TextWatcher() {
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						if (s.length() > 1) {
+							s.replace(0, s.length(), String.valueOf(s.charAt(s.length() - 1)));
+						}
+					}
+				};
+			}
 		};
 
 		editDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "dialog_send_brick");
@@ -200,7 +232,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		sequence.addAction(ExtendedActions.send(sprite, this));
+		sequence.addAction(ExtendedActions.send(sprite, this, sendBeginBrick));
 		return null;
 	}
 

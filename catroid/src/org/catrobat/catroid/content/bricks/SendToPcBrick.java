@@ -38,7 +38,6 @@ import org.catrobat.catroid.io.PcConnectionManager.Broadcast;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -158,7 +157,6 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sendSpinner.setAdapter(dataAdapter);
 		sendSpinner.setSelection(selectedItem);
-		connection = null;
 	}
 
 	public void initializeView(View view, Context context_) {
@@ -218,7 +216,7 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		Action action = ExtendedActions.send_to_pc(sprite);
+		Action action = ExtendedActions.sendBegin(sprite, this, connection);
 		sequence.addAction(action);
 		return null;
 	}
@@ -244,13 +242,11 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 				}
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				sendSpinner.setAdapter(dataAdapter);
-				Log.v("Reeesl", "size: " + availableIps.size() + "\n");
 				if (ipList.size() == 0) {
 					dataAdapter.add(context.getString(R.string.empty));
 				}
 				if (selectedItem != -1
 						&& !sendSpinner.getItemAtPosition(selectedItem).equals(context.getString(R.string.scan))) {
-					Log.v("Reeesl", "selected item: " + sendSpinner.getItemAtPosition(selectedItem) + "\n");
 					sendSpinner.setSelection(selectedItem);
 				}
 				dataAdapter.add(context.getString(R.string.scan));
@@ -264,9 +260,11 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 
 	@Override
 	public void setConnection(Connection connection_) {
+
 		connection = connection_;
 	}
 
+	@Override
 	public Connection getConnection() {
 		return connection;
 	}

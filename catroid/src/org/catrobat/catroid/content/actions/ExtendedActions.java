@@ -27,10 +27,12 @@ import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.BroadcastEvent;
 import org.catrobat.catroid.content.BroadcastEvent.BroadcastType;
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.bricks.SendBeginBrick;
 import org.catrobat.catroid.content.bricks.SendBrick;
 import org.catrobat.catroid.content.bricks.SpeakBrick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.UserVariable;
+import org.catrobat.catroid.io.Connection;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -351,21 +353,24 @@ public class ExtendedActions extends Actions {
 		return action;
 	}
 
-	public static Action send_to_pc(Sprite sprite) {
-		SendToPcAction action = action(SendToPcAction.class);
+	public static Action sendBegin(Sprite sprite, SendBeginBrick sendBeginBrick, Connection connection) {
+		SendBeginAction action = action(SendBeginAction.class);
 		action.setSprite(sprite);
+		action.setSendBeginBrick(sendBeginBrick);
 		return action;
 	}
 
-	public static Action send(Sprite sprite, SendBrick send) {
+	public static Action send(Sprite sprite, SendBrick sendBrick, SendBeginBrick sendBeginBrick) {
 		SendAction action = action(SendAction.class);
 		action.setSprite(sprite);
-		action.setSendBrick(send);
+		action.setSendBrick(sendBrick);
+		action.setSendBeginBrick(sendBeginBrick);
 		return action;
 	}
 
-	public static Action sendEnd(Sprite sprite) {
-		SendAction action = action(SendAction.class);
+	public static Action sendEnd(Sprite sprite, SendBeginBrick sendBeginBrick) {
+		SendEndAction action = action(SendEndAction.class);
+		action.setSendBeginBrick(sendBeginBrick);
 		action.setSprite(sprite);
 		return action;
 	}

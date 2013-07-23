@@ -23,6 +23,7 @@
 package org.catrobat.catroid.content.actions;
 
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.bricks.SendBeginBrick;
 import org.catrobat.catroid.content.bricks.SendBrick;
 
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -31,11 +32,11 @@ public class SendAction extends TemporalAction {
 
 	private Sprite sprite;
 	private SendBrick sendBrick;
+	private SendBeginBrick sendBeginBrick;
 
 	@Override
 	protected void update(float percent) {
-		// TODO
-
+		sendBeginBrick.setCommand(sendBrick.getCommand());
 	}
 
 	public void setSendBrick(SendBrick sendBrick_) {
@@ -44,6 +45,10 @@ public class SendAction extends TemporalAction {
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
+	}
+
+	public void setSendBeginBrick(SendBeginBrick sendBeginBrick) {
+		this.sendBeginBrick = sendBeginBrick;
 	}
 
 }

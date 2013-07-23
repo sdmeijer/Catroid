@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.io.Connection;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
@@ -36,6 +37,7 @@ public abstract class SendBeginBrick extends NestingBrick {
 	protected SendBrick sendBrick;
 	protected SendEndBrick sendEndBrick;
 	private transient long beginSendTime;
+	private transient ArrayList<Integer> commandList;
 
 	private transient SendBeginBrick copy;
 
@@ -111,7 +113,7 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		//Action action = ExtendedActions.send_begin(sprite);
+		//Action action = ExtendedActions.sendBegin(sprite, this);
 		//sequence.addAction(action);
 		return null;
 	}
@@ -132,5 +134,19 @@ public abstract class SendBeginBrick extends NestingBrick {
 	public SendBeginBrick getCopy() {
 		return copy;
 	}
+
+	public void setCommand(int newCommand) {
+		commandList.add(newCommand);
+	}
+
+	public ArrayList<Integer> getCommandList() {
+		return commandList;
+	}
+
+	public void initializeCommandList() {
+		commandList = new ArrayList<Integer>();
+	}
+
+	public abstract Connection getConnection();
 
 }

@@ -54,7 +54,6 @@ public class ProgramMenuActivity extends SherlockFragmentActivity {
 		findViewById(R.id.bottom_bar_separator).setVisibility(View.GONE);
 
 		actionBar = getSupportActionBar();
-
 		String title = ProjectManager.getInstance().getCurrentSprite().getName();
 		actionBar.setTitle(title);
 		actionBar.setHomeButtonEnabled(true);

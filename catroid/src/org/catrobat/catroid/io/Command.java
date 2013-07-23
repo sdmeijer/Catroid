@@ -12,12 +12,12 @@ public class Command implements Serializable {
 	private commandType type;
 	private int[] keyComb;
 
-	Command(int command_key, commandType type_) {
+	public Command(int command_key, commandType type_) {
 		key = command_key;
 		type = type_;
 	}
 
-	Command(int[] command_keyComb, commandType type_) {
+	public Command(int[] command_keyComb, commandType type_) {
 		keyComb = command_keyComb;
 		type = type_;
 	}

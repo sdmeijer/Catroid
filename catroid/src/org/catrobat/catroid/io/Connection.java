@@ -30,6 +30,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Connection extends Thread {
 	public static enum connectionState {
 		UNDEFINED, CONNECTED, UNCONNECTED
@@ -63,15 +65,18 @@ public class Connection extends Thread {
 		comb[1] = 14;
 		comb[2] = 'z';
 		//Send ctrl + shift + z (redo)
-		Command test_key_comb = new Command(comb, Command.commandType.KEY_COMBINATION);
-		try {
-			if (objectOutput != null) {
-				objectOutput.writeObject(test_single_key);
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		/*
+		 * Command test_key_comb = new Command(comb, Command.commandType.KEY_COMBINATION);
+		 * try {
+		 * if (objectOutput != null) {
+		 * objectOutput.writeObject(test_single_key);
+		 * }
+		 * } catch (IOException e1) {
+		 * e1.printStackTrace();
+		 * }
+		 */
 		while (thisThread == this) {
+
 			if (commandList.size() > 0) {
 				sendCommand();
 			} else {
@@ -123,6 +128,7 @@ public class Connection extends Thread {
 
 	public void sendCommand() {
 		Command actual_command = commandList.get(0);
+		Log.v("Reeesl", "send: " + actual_command.getKey() + "\n");
 		try {
 			objectOutput.writeObject(actual_command);
 		} catch (IOException e1) {
@@ -146,5 +152,10 @@ public class Connection extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void addCommand(Command command) {
+		commandList.add(command);
+		Log.v("Reeesl", "add: " + command.getKey() + "\n");
 	}
 }
