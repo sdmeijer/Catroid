@@ -79,20 +79,6 @@ public class PlaySoundActionTest extends InstrumentationTestCase {
 		assertTrue("MediaPlayer is not playing", mediaPlayer.isPlaying());
 	}
 
-	public void testIllegalArgument() {
-		Sprite testSprite = new Sprite("2");
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName("illegalFileName");
-		testSprite.getSoundList().add(soundInfo);
-		PlaySoundAction action = ExtendedActions.playSound(testSprite, soundInfo);
-		try {
-			action.act(1.0f);
-			fail("Execution of PlaySoundBrick with illegal file path did not cause an IllegalArgumentException to be thrown");
-		} catch (IllegalArgumentException e) {
-			// expected behavior
-		}
-	}
-
 	public void testPlaySimultaneousSounds() throws InterruptedException {
 		Thread soundThread01 = new Thread(new Runnable() {
 			PlaySoundAction action = ExtendedActions.playSound(new Sprite("4"), getSoundInfo());
