@@ -10,15 +10,15 @@ public class Command implements Serializable {
 
 	private int key;
 	private commandType type;
-	private int[] key_comb;
+	private int[] keyComb;
 
 	Command(int command_key, commandType type_) {
 		key = command_key;
 		type = type_;
 	}
 
-	Command(int[] command_key_comb, commandType type_) {
-		key_comb = command_key_comb;
+	Command(int[] command_keyComb, commandType type_) {
+		keyComb = command_keyComb;
 		type = type_;
 	}
 
@@ -27,7 +27,7 @@ public class Command implements Serializable {
 	}
 
 	public int[] getKeyComb() {
-		return key_comb;
+		return keyComb;
 	}
 
 	public commandType getCommandType() {

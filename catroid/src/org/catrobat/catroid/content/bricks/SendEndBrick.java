@@ -49,11 +49,14 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = SendEndBrick.class.getSimpleName();
 	private SendBeginBrick sendBeginBrick;
+	private SendBrick sendBrick;
 
-	public SendEndBrick(Sprite sprite, SendBeginBrick sendStartingBrick) {
+	public SendEndBrick(Sprite sprite, SendBeginBrick sendBeginBrick, SendBrick sendBrick) {
 		this.sprite = sprite;
-		this.sendBeginBrick = sendStartingBrick;
-		sendStartingBrick.setSendEndBrick(this);
+		this.sendBeginBrick = sendBeginBrick;
+		sendBeginBrick.setSendEndBrick(this);
+		this.sendBrick = sendBrick;
+		sendBrick.setSendEndBrick(this);
 	}
 
 	public SendEndBrick() {
@@ -69,7 +72,10 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 	public Brick copyBrickForSprite(Sprite sprite, Script script) {
 		SendEndBrick copyBrick = (SendEndBrick) clone();
 		sendBeginBrick.setSendEndBrick(this);
+		sendBrick.setSendEndBrick(this);
 
+		copyBrick.sendBeginBrick = null;
+		copyBrick.sendBrick = null;
 		copyBrick.sprite = sprite;
 		return copyBrick;
 	}
@@ -105,25 +111,27 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public View getViewWithAlpha(int alphaValue) {
-		LinearLayout layout = (LinearLayout) view.findViewById(R.id.brick_send_end_layout);
-		if (layout == null) {
-			layout = (LinearLayout) view.findViewById(R.id.brick_send_end_layout);
-			TextView sendLabel = (TextView) view.findViewById(R.id.brick_send_end_label);
-			sendLabel.setTextColor(sendLabel.getTextColors().withAlpha(alphaValue));
-		} else {
-			TextView sendLabel = (TextView) view.findViewById(R.id.brick_send_end_label);
-			sendLabel.setTextColor(sendLabel.getTextColors().withAlpha(alphaValue));
-		}
-		Drawable background = layout.getBackground();
-		background.setAlpha(alphaValue);
+		if (view != null) {
+			LinearLayout layout = (LinearLayout) view.findViewById(R.id.brick_send_end_layout);
+			if (layout == null) {
+				layout = (LinearLayout) view.findViewById(R.id.brick_send_end_layout);
+				TextView sendLabel = (TextView) view.findViewById(R.id.brick_send_end_label);
+				sendLabel.setTextColor(sendLabel.getTextColors().withAlpha(alphaValue));
+			} else {
+				TextView sendLabel = (TextView) view.findViewById(R.id.brick_send_end_label);
+				sendLabel.setTextColor(sendLabel.getTextColors().withAlpha(alphaValue));
+			}
+			Drawable background = layout.getBackground();
+			background.setAlpha(alphaValue);
 
-		this.alphaValue = (alphaValue);
+			this.alphaValue = (alphaValue);
+		}
 		return view;
 	}
 
 	@Override
 	public Brick clone() {
-		return new SendEndBrick(getSprite(), getSendBeginBrick());
+		return new SendEndBrick(getSprite(), getSendBeginBrick(), sendBrick);
 	}
 
 	@Override
@@ -133,7 +141,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public boolean isDraggableOver(Brick brick) {
-		if (brick == sendBeginBrick) {
+		if (brick == sendBrick) {
 			return false;
 		} else {
 			return true;
@@ -142,7 +150,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public boolean isInitialized() {
-		if (sendBeginBrick == null) {
+		if (sendBrick == null) {
 			return false;
 		} else {
 			return true;
@@ -160,6 +168,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
 		if (sorted) {
 			nestingBrickList.add(sendBeginBrick);
+			nestingBrickList.add(sendBrick);
 			nestingBrickList.add(this);
 		} else {
 			nestingBrickList.add(this);

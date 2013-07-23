@@ -198,14 +198,14 @@ public class PcConnectionManager implements ConnectionRequest {
 
 	@SuppressLint("NewApi")
 	public int getNetMaskForHotspot(InetAddress inetAddress) {
-		NetworkInterface netWork;
-		netWork = null;
+		NetworkInterface network;
+		network = null;
 		try {
-			netWork = NetworkInterface.getByInetAddress(inetAddress);
+			network = NetworkInterface.getByInetAddress(inetAddress);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		int numOfHostbits = netWork.getInterfaceAddresses().get(0).getNetworkPrefixLength();
+		int numOfHostbits = network.getInterfaceAddresses().get(0).getNetworkPrefixLength();
 		int maskTemp = 0xFFFFFFFF << (32 - numOfHostbits);
 		int mask = 0;
 		mask |= (((maskTemp & 0xFF000000) >> 24 & 0xFF));

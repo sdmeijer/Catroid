@@ -28,9 +28,12 @@ import java.util.List;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 public abstract class SendBeginBrick extends NestingBrick {
 	private static final long serialVersionUID = 1L;
 
+	protected SendBrick sendBrick;
 	protected SendEndBrick sendEndBrick;
 	private transient long beginSendTime;
 
@@ -59,6 +62,14 @@ public abstract class SendBeginBrick extends NestingBrick {
 		this.sendEndBrick = sendEndBrick;
 	}
 
+	public SendBrick getSendBrick() {
+		return sendBrick;
+	}
+
+	public void setSendBrick(SendBrick sendBrick_) {
+		this.sendBrick = sendBrick_;
+	}
+
 	@Override
 	public boolean isDraggableOver(Brick brick) {
 		if (brick == sendEndBrick) {
@@ -70,7 +81,7 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	@Override
 	public boolean isInitialized() {
-		if (sendEndBrick == null) {
+		if (sendEndBrick == null || sendBrick == null) {
 			return false;
 		} else {
 			return true;
@@ -79,16 +90,30 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	@Override
 	public void initialize() {
-		sendEndBrick = new SendEndBrick(sprite, this);
+		sendBrick = new SendBrick(sprite, this);
+		sendEndBrick = new SendEndBrick(sprite, this, sendBrick);
 	}
 
 	@Override
 	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
 		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
-		nestingBrickList.add(this);
-		nestingBrickList.add(sendEndBrick);
+		if (sorted) {
+			nestingBrickList.add(this);
+			nestingBrickList.add(sendBrick);
+			nestingBrickList.add(sendEndBrick);
+		} else {
+			nestingBrickList.add(this);
+			nestingBrickList.add(sendEndBrick);
+		}
 
 		return nestingBrickList;
+	}
+
+	@Override
+	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
+		//Action action = ExtendedActions.send_begin(sprite);
+		//sequence.addAction(action);
+		return null;
 	}
 
 	@Override
@@ -96,8 +121,9 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	@Override
 	public Brick copyBrickForSprite(Sprite sprite, Script script) {
-		//sendEndBrick will be set in the SendEndBrick's copyBrickForSprite method
 		SendBeginBrick copyBrick = (SendBeginBrick) clone();
+		copyBrick.sendBrick = null;
+		copyBrick.sendEndBrick = null;
 		copyBrick.sprite = sprite;
 		copy = copyBrick;
 		return copyBrick;

@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.catrobat.catroid.R;
@@ -46,14 +47,20 @@ import android.widget.TextView;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-public class SendBrick extends BrickBaseType implements OnClickListener {
+public class SendBrick extends NestingBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private transient int command;
-
 	private transient View prototypeView;
+	private transient char letter = 'x';
+	private SendBeginBrick sendBeginBrick;
+	private SendEndBrick sendEndBrick;
 
-	public SendBrick(Sprite sprite) {
+	private transient SendBrick copy;
+
+	public SendBrick(Sprite sprite, SendBeginBrick beginBrick) {
 		this.sprite = sprite;
+		this.sendBeginBrick = beginBrick;
+		sendBeginBrick.setSendBrick(this);
 	}
 
 	public SendBrick() {
@@ -62,6 +69,10 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
+	}
+
+	public SendBrick getCopy() {
+		return copy;
 	}
 
 	@Override
@@ -90,12 +101,13 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 				adapter.handleCheck(brickInstance, isChecked);
 			}
 		});
-		TextView textX = (TextView) view.findViewById(R.id.brick_send_prototype_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_send_edit_text);
+		TextView textLetter = (TextView) view.findViewById(R.id.brick_send_prototype_text_view);
+		EditText editLetter = (EditText) view.findViewById(R.id.brick_send_edit_text);
 
-		textX.setVisibility(View.GONE);
-		editX.setVisibility(View.VISIBLE);
-		editX.setOnClickListener(this);
+		textLetter.setVisibility(View.GONE);
+		editLetter.setVisibility(View.VISIBLE);
+		editLetter.setText(String.valueOf(letter));
+		editLetter.setOnClickListener(this);
 
 		return view;
 	}
@@ -110,10 +122,11 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 			background.setAlpha(alphaValue);
 
 			TextView textX = (TextView) view.findViewById(R.id.brick_send_text_view);
-			EditText editX = (EditText) view.findViewById(R.id.brick_send_edit_text);
+			EditText editLetter = (EditText) view.findViewById(R.id.brick_send_edit_text);
 			textX.setTextColor(textX.getTextColors().withAlpha(alphaValue));
-			editX.setTextColor(editX.getTextColors().withAlpha(alphaValue));
-			editX.getBackground().setAlpha(alphaValue);
+			editLetter.setTextColor(editLetter.getTextColors().withAlpha(alphaValue));
+			editLetter.getBackground().setAlpha(alphaValue);
+			editLetter.setText(String.valueOf(letter));
 
 			this.alphaValue = (alphaValue);
 
@@ -125,21 +138,30 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 	@Override
 	public View getPrototypeView(Context context) {
 		prototypeView = View.inflate(context, R.layout.brick_send, null);
+		TextView textLetter = (TextView) prototypeView.findViewById(R.id.brick_send_prototype_text_view);
+		EditText editLetter = (EditText) prototypeView.findViewById(R.id.brick_send_edit_text);
+
+		textLetter.setVisibility(View.GONE);
+		editLetter.setVisibility(View.VISIBLE);
+		editLetter.setText(String.valueOf(letter));
 		return prototypeView;
 	}
 
 	@Override
 	public Brick clone() {
-		return new SendBrick(getSprite());
+		return new SendBrick(sprite, sendBeginBrick);
 	}
 
 	@Override
 	public void onClick(View view) {
-		Log.v("Reeesl", "challo\n");
 		showSelectLetterDialog(view.getContext());
 		if (checkbox.getVisibility() == View.VISIBLE) {
 			return;
 		}
+	}
+
+	public void setSendEndBrick(SendEndBrick sendEndBrick) {
+		this.sendEndBrick = sendEndBrick;
 	}
 
 	private void showSelectLetterDialog(final Context context) {
@@ -151,7 +173,7 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 
 			@Override
 			protected boolean handleOkButton() {
-				char newLetter;
+				final char newLetter;
 				try {
 					newLetter = (input.getText().charAt(0));
 				} catch (IndexOutOfBoundsException e) {
@@ -159,6 +181,7 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 					return false;
 				}
 				command = newLetter;
+				letter = newLetter;
 				return true;
 			}
 
@@ -179,5 +202,44 @@ public class SendBrick extends BrickBaseType implements OnClickListener {
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
 		sequence.addAction(ExtendedActions.send(sprite, this));
 		return null;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		if (sendBeginBrick == null || sendEndBrick == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public void initialize() {
+		Log.w("SendBrick", "Cannot create the IfLogic Bricks from here!");
+	}
+
+	@Override
+	public boolean isDraggableOver(Brick brick) {
+		if (brick == sendBeginBrick || brick == sendEndBrick) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
+		if (sorted) {
+			nestingBrickList.add(sendBeginBrick);
+			nestingBrickList.add(this);
+			nestingBrickList.add(sendEndBrick);
+		} else {
+			//nestingBrickList.add(this);
+			nestingBrickList.add(sendBeginBrick);
+			nestingBrickList.add(sendEndBrick);
+		}
+
+		return nestingBrickList;
 	}
 }

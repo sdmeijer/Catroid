@@ -38,6 +38,7 @@ import org.catrobat.catroid.io.PcConnectionManager.Broadcast;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -95,7 +96,6 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 			PcConnectionManager.getInstance(context).addToConnectionRequestList(this);
 		}
 		initializeView(view, context_);
-		availableIps = new HashMap<String, String>();
 		setCheckboxView(R.id.brick_send_to_pc_checkbox);
 		final Brick brickInstance = this;
 		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -209,10 +209,12 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 		return ip_with_port;
 	}
 
-	@Override
-	public void initialize() {
-		sendEndBrick = new SendEndBrick(sprite, this);
-	}
+	/*
+	 * @Override
+	 * public void initialize() {
+	 * sendEndBrick = new SendEndBrick(sprite, this);
+	 * }
+	 */
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
@@ -242,15 +244,14 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 				}
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				sendSpinner.setAdapter(dataAdapter);
+				Log.v("Reeesl", "size: " + availableIps.size() + "\n");
 				if (ipList.size() == 0) {
-					dataAdapter.remove(context.getString(R.string.empty));
-				}
-				if (availableIps.size() == 0) {
 					dataAdapter.add(context.getString(R.string.empty));
 				}
-				if (selectedItem != -1) {
+				if (selectedItem != -1
+						&& !sendSpinner.getItemAtPosition(selectedItem).equals(context.getString(R.string.scan))) {
+					Log.v("Reeesl", "selected item: " + sendSpinner.getItemAtPosition(selectedItem) + "\n");
 					sendSpinner.setSelection(selectedItem);
-					//Log.v("Reeesl", "selected item: " + selectedItem + "\n");
 				}
 				dataAdapter.add(context.getString(R.string.scan));
 			}
