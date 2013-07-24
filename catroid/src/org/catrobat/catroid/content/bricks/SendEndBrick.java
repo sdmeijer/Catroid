@@ -168,7 +168,11 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
 		if (sorted) {
 			nestingBrickList.add(sendBeginBrick);
-			nestingBrickList.add(sendBrick);
+			ArrayList<SendBrick> additionalSendBricks = sendBeginBrick.getAdditionalSendBricksForNestingBrickList();
+			if (additionalSendBricks.size() > 0) {
+				nestingBrickList.addAll(additionalSendBricks);
+			}
+			//nestingBrickList.add(sendBrick);
 			nestingBrickList.add(this);
 		} else {
 			nestingBrickList.add(this);
@@ -185,7 +189,7 @@ public class SendEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		sequence.addAction(ExtendedActions.sendEnd(sprite, sendBeginBrick));
+		sequence.addAction(ExtendedActions.sendEnd(sendBeginBrick));
 		return null;
 	}
 }

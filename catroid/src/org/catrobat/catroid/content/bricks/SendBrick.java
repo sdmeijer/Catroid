@@ -60,6 +60,12 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	private transient SendBrick copy;
 
+	public SendBrick(Sprite sprite, SendBeginBrick beginBrick, SendEndBrick sendEndBrick) {
+		this.sprite = sprite;
+		this.sendBeginBrick = beginBrick;
+		this.sendEndBrick = sendEndBrick;
+	}
+
 	public SendBrick(Sprite sprite, SendBeginBrick beginBrick) {
 		this.sprite = sprite;
 		this.sendBeginBrick = beginBrick;
@@ -151,7 +157,9 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SendBrick(getSprite(), sendBeginBrick);
+		SendBrick clonedSendBrick = new SendBrick(getSprite(), sendBeginBrick, sendEndBrick);
+		sendBeginBrick.addToAdditionalSendBricksForNestingBrickList(clonedSendBrick);
+		return clonedSendBrick;
 	}
 
 	@Override
@@ -225,9 +233,13 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 		return command;
 	}
 
+	public SendBeginBrick getSendBeginBrick() {
+		return sendBeginBrick;
+	}
+
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		sequence.addAction(ExtendedActions.send(sprite, this, sendBeginBrick));
+		sequence.addAction(ExtendedActions.send(this, sendBeginBrick));
 		return null;
 	}
 
@@ -260,7 +272,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 		if (sorted) {
 			nestingBrickList.add(sendBeginBrick);
 			nestingBrickList.add(this);
-			//nestingBrickList.add(sendEndBrick);
+			nestingBrickList.add(sendEndBrick);
 		} else {
 			//nestingBrickList.add(this);
 			nestingBrickList.add(sendBeginBrick);

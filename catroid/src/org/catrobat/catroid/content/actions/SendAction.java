@@ -22,7 +22,6 @@
  */
 package org.catrobat.catroid.content.actions;
 
-import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.SendBeginBrick;
 import org.catrobat.catroid.content.bricks.SendBrick;
 
@@ -30,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
 public class SendAction extends TemporalAction {
 
-	private Sprite sprite;
 	private SendBrick sendBrick;
 	private SendBeginBrick sendBeginBrick;
 
@@ -41,10 +39,6 @@ public class SendAction extends TemporalAction {
 
 	public void setSendBrick(SendBrick sendBrick_) {
 		sendBrick = sendBrick_;
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
 	}
 
 	public void setSendBeginBrick(SendBeginBrick sendBeginBrick) {

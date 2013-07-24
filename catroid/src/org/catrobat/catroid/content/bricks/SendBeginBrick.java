@@ -35,23 +35,12 @@ public abstract class SendBeginBrick extends NestingBrick {
 	private static final long serialVersionUID = 1L;
 	protected SendBrick sendBrick;
 	protected SendEndBrick sendEndBrick;
-	private transient long beginSendTime;
 	private transient ArrayList<Integer> commandList;
 	private transient SendBeginBrick copy;
+	private ArrayList<SendBrick> additionalSendBricksForNestingList;
 
 	protected SendBeginBrick() {
-	}
-
-	protected void setFirstStartTime() {
-		beginSendTime = System.nanoTime();
-	}
-
-	public long getBeginSendTime() {
-		return beginSendTime;
-	}
-
-	public void setBeginSendTime(long beginSendTime) {
-		this.beginSendTime = beginSendTime;
+		additionalSendBricksForNestingList = new ArrayList<SendBrick>();
 	}
 
 	public SendEndBrick getSendEndBrick() {
@@ -68,6 +57,7 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	public void setSendBrick(SendBrick sendBrick) {
 		this.sendBrick = sendBrick;
+		additionalSendBricksForNestingList.add(sendBrick);
 	}
 
 	@Override
@@ -92,6 +82,7 @@ public abstract class SendBeginBrick extends NestingBrick {
 	public void initialize() {
 		sendBrick = new SendBrick(sprite, this);
 		sendEndBrick = new SendEndBrick(sprite, this, sendBrick);
+		sendBrick.setSendEndBrick(sendEndBrick);
 	}
 
 	@Override
@@ -99,7 +90,10 @@ public abstract class SendBeginBrick extends NestingBrick {
 		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
 		if (sorted) {
 			nestingBrickList.add(this);
-			nestingBrickList.add(sendBrick);
+			if (additionalSendBricksForNestingList.size() > 0) {
+				nestingBrickList.addAll(additionalSendBricksForNestingList);
+			}
+			//nestingBrickList.add(sendBrick);
 			nestingBrickList.add(sendEndBrick);
 		} else {
 			nestingBrickList.add(this);
@@ -141,6 +135,18 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	public void initializeCommandList() {
 		commandList = new ArrayList<Integer>();
+	}
+
+	public void addToAdditionalSendBricksForNestingBrickList(SendBrick sendBrick) {
+		additionalSendBricksForNestingList.add(sendBrick);
+	}
+
+	public void removeAdditionalSendBricksForNestingBrickList(SendBrick sendBrick) {
+		additionalSendBricksForNestingList.remove(sendBrick);
+	}
+
+	public ArrayList<SendBrick> getAdditionalSendBricksForNestingBrickList() {
+		return additionalSendBricksForNestingList;
 	}
 
 	public abstract Connection getConnection();

@@ -25,7 +25,6 @@ package org.catrobat.catroid.content.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.SendBeginBrick;
 import org.catrobat.catroid.content.bricks.SendToPcBrick;
 import org.catrobat.catroid.io.Command;
@@ -35,7 +34,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
 public class SendEndAction extends TemporalAction {
 
-	private Sprite sprite;
 	private SendBeginBrick sendBeginBrick;
 
 	@Override
@@ -53,15 +51,11 @@ public class SendEndAction extends TemporalAction {
 				letters[i] = it.next();
 				i++;
 			}
-			command = new Command(letters, Command.commandType.SINGLE_KEY);
+			command = new Command(letters, Command.commandType.KEY_COMBINATION);
 		}
 
 		Connection connection = ((SendToPcBrick) sendBeginBrick).getConnection();
 		connection.addCommand(command);
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
 	}
 
 	public void setSendBeginBrick(SendBeginBrick sendBeginBrick) {

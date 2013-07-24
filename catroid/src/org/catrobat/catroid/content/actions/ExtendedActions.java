@@ -353,25 +353,22 @@ public class ExtendedActions extends Actions {
 		return action;
 	}
 
-	public static Action sendBegin(Sprite sprite, SendBeginBrick sendBeginBrick, Connection connection) {
+	public static Action sendBegin(SendBeginBrick sendBeginBrick, Connection connection) {
 		SendBeginAction action = action(SendBeginAction.class);
-		action.setSprite(sprite);
 		action.setSendBeginBrick(sendBeginBrick);
 		return action;
 	}
 
-	public static Action send(Sprite sprite, SendBrick sendBrick, SendBeginBrick sendBeginBrick) {
+	public static Action send(SendBrick sendBrick, SendBeginBrick sendBeginBrick) {
 		SendAction action = action(SendAction.class);
-		action.setSprite(sprite);
 		action.setSendBrick(sendBrick);
 		action.setSendBeginBrick(sendBeginBrick);
 		return action;
 	}
 
-	public static Action sendEnd(Sprite sprite, SendBeginBrick sendBeginBrick) {
+	public static Action sendEnd(SendBeginBrick sendBeginBrick) {
 		SendEndAction action = action(SendEndAction.class);
 		action.setSendBeginBrick(sendBeginBrick);
-		action.setSprite(sprite);
 		return action;
 	}
 }

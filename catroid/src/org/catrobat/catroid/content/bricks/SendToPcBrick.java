@@ -209,7 +209,7 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		Action action = ExtendedActions.sendBegin(sprite, this, connection);
+		Action action = ExtendedActions.sendBegin(this, connection);
 		sequence.addAction(action);
 		return null;
 	}

@@ -38,6 +38,7 @@ import org.catrobat.catroid.content.bricks.DeadEndBrick;
 import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.NestingBrick;
 import org.catrobat.catroid.content.bricks.ScriptBrick;
+import org.catrobat.catroid.content.bricks.SendBrick;
 import org.catrobat.catroid.ui.ViewSwitchLock;
 import org.catrobat.catroid.ui.dragndrop.DragAndDropListView;
 import org.catrobat.catroid.ui.dragndrop.DragAndDropListener;
@@ -282,9 +283,12 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener, On
 			return true;
 		}
 		if (brick instanceof NestingBrick && !nestingBrickList.contains(brick)) {
-			return true;
+			if (brick instanceof SendBrick) {
+				return false;
+			} else {
+				return true;
+			}
 		}
-
 		return false;
 	}
 
@@ -403,16 +407,20 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener, On
 		if (brick instanceof NestingBrick) {
 			((NestingBrick) draggedBrick).initialize();
 			List<NestingBrick> nestingBrickList = ((NestingBrick) draggedBrick).getAllNestingBrickParts(true);
-			for (int i = 0; i < nestingBrickList.size(); i++) {
-				if (nestingBrickList.get(i) instanceof DeadEndBrick) {
-					if (i < nestingBrickList.size() - 1) {
-						Log.w(TAG, "Adding a DeadEndBrick in the middle of the NestingBricks");
+			if (draggedBrick instanceof SendBrick) {
+				script.addBrick(brickPosition, draggedBrick);
+			} else {
+				for (int i = 0; i < nestingBrickList.size(); i++) {
+					if (nestingBrickList.get(i) instanceof DeadEndBrick) {
+						if (i < nestingBrickList.size() - 1) {
+							Log.w(TAG, "Adding a DeadEndBrick in the middle of the NestingBricks");
+						}
+						position = getPositionForDeadEndBrick(position);
+						temp = getScriptAndBrickIndexFromProject(position);
+						script.addBrick(temp[1], nestingBrickList.get(i));
+					} else {
+						script.addBrick(brickPosition + i, nestingBrickList.get(i));
 					}
-					position = getPositionForDeadEndBrick(position);
-					temp = getScriptAndBrickIndexFromProject(position);
-					script.addBrick(temp[1], nestingBrickList.get(i));
-				} else {
-					script.addBrick(brickPosition + i, nestingBrickList.get(i));
 				}
 			}
 		} else {
@@ -671,8 +679,20 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener, On
 
 				Brick brick = script.getBrick(temp[1]);
 				if (brick instanceof NestingBrick) {
-					for (Brick tempBrick : ((NestingBrick) brick).getAllNestingBrickParts(true)) {
-						script.removeBrick(tempBrick);
+					boolean deleteAll = true;
+					if (brick instanceof SendBrick
+							&& ((((SendBrick) brick).getSendBeginBrick().getAdditionalSendBricksForNestingBrickList())
+									.size() > 1)) {
+						SendBrick sendBrick = (SendBrick) brick;
+						script.removeBrick(sendBrick);
+						((SendBrick) brick).getSendBeginBrick().removeAdditionalSendBricksForNestingBrickList(
+								(SendBrick) brick);
+						deleteAll = false;
+					}
+					if (deleteAll) {
+						for (Brick tempBrick : ((NestingBrick) brick).getAllNestingBrickParts(true)) {
+							script.removeBrick(tempBrick);
+						}
 					}
 				} else {
 					script.removeBrick(brick);
@@ -897,6 +917,7 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener, On
 						List<NestingBrick> list = ((NestingBrick) brick).getAllNestingBrickParts(true);
 						for (Brick tempBrick : list) {
 							animatedBricks.add(tempBrick);
+							Log.v("Reeesl", "added");
 						}
 					}
 					notifyDataSetChanged();
