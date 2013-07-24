@@ -84,17 +84,17 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 	}
 
 	@Override
-	public View getView(final Context context_, int brickId, BaseAdapter baseAdapter) {
+	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
 		if (animationState) {
 			return view;
 		}
-		view = View.inflate(context_, R.layout.brick_send_to_pc, null);
+		view = View.inflate(context, R.layout.brick_send_to_pc, null);
 		view = getViewWithAlpha(alphaValue);
-		if (context_ != null) {
-			context = context_;
+		if (context != null) {
+			this.context = context;
 			PcConnectionManager.getInstance(context).addToConnectionRequestList(this);
 		}
-		initializeView(view, context_);
+		initializeView(view, context);
 		setCheckboxView(R.id.brick_send_to_pc_checkbox);
 		final Brick brickInstance = this;
 		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -137,34 +137,34 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 		return view;
 	}
 
-	public void initializeSpinner(View view_, boolean prototype) {
-		sendSpinner = (Spinner) view_.findViewById(R.id.brick_ips_spinner);
+	public void initializeSpinner(View view, boolean prototype) {
+		sendSpinner = (Spinner) view.findViewById(R.id.brick_ips_spinner);
 		sendSpinner.setFocusableInTouchMode(false);
 		sendSpinner.setFocusable(false);
-		ArrayList<String> spinner_ip_list = new ArrayList<String>();
+		ArrayList<String> spinnerIpList = new ArrayList<String>();
 		if (prototype) {
-			spinner_ip_list.add(context.getString(R.string.new_ip_list));
+			spinnerIpList.add(context.getString(R.string.new_ip_list));
 		} else {
 			if (PcConnectionManager.getInstance(context).getActualIpList().size() == 0) {
-				spinner_ip_list.add(context.getString(R.string.empty));
-				spinner_ip_list.add(context.getString(R.string.scan));
+				spinnerIpList.add(context.getString(R.string.empty));
+				spinnerIpList.add(context.getString(R.string.scan));
 			} else {
-				spinner_ip_list.addAll(0, PcConnectionManager.getInstance(context).getActualIpList());
-				spinner_ip_list.add(context.getString(R.string.scan));
+				spinnerIpList.addAll(0, PcConnectionManager.getInstance(context).getActualIpList());
+				spinnerIpList.add(context.getString(R.string.scan));
 			}
 		}
-		dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinner_ip_list);
+		dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerIpList);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sendSpinner.setAdapter(dataAdapter);
 		sendSpinner.setSelection(selectedItem);
 	}
 
-	public void initializeView(View view, Context context_) {
+	public void initializeView(View view, Context context) {
 		if (availableIps == null) {
 			availableIps = new HashMap<String, String>();
 		}
-		if (context_ != null) {
-			context = context_;
+		if (context != null) {
+			this.context = context;
 		}
 		initializeSpinner(view, false);
 		sendSpinner.setClickable(true);
@@ -183,36 +183,29 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 	}
 
 	@Override
-	public View getPrototypeView(Context context_) {
-		View prototypeView = View.inflate(context_, R.layout.brick_send_to_pc, null);
-		initializePrototypeView(prototypeView, context_);
+	public View getPrototypeView(Context context) {
+		View prototypeView = View.inflate(context, R.layout.brick_send_to_pc, null);
+		initializePrototypeView(prototypeView, context);
 		return prototypeView;
 	}
 
-	public void initializePrototypeView(View prototype_view, Context context_) {
+	public void initializePrototypeView(View prototypeView, Context context) {
 		availableIps = new HashMap<String, String>();
-		if (context_ != null) {
-			context = context_;
+		if (context != null) {
+			this.context = context;
 		}
-		initializeSpinner(prototype_view, true);
+		initializeSpinner(prototypeView, true);
 		sendSpinner.setClickable(false);
 		sendSpinner.setEnabled(false);
 	}
 
-	public String stripPort(String ip_with_port) {
-		int pos = ip_with_port.indexOf(":");
+	public String stripPort(String ipWithPort) {
+		int pos = ipWithPort.indexOf(":");
 		if (pos != -1) {
-			ip_with_port = ip_with_port.substring(1, pos);
+			ipWithPort = ipWithPort.substring(1, pos);
 		}
-		return ip_with_port;
+		return ipWithPort;
 	}
-
-	/*
-	 * @Override
-	 * public void initialize() {
-	 * sendEndBrick = new SendEndBrick(sprite, this);
-	 * }
-	 */
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
@@ -236,8 +229,8 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 				Iterator<Entry<String, String>> it = ipList.entrySet().iterator();
 				while (it.hasNext()) {
 					Entry<String, String> pairs = it.next();
-					String this_element = pairs.getKey();
-					dataAdapter.add(this_element);
+					String ip = pairs.getKey();
+					dataAdapter.add(ip);
 					availableIps.put(pairs.getKey(), pairs.getValue());
 				}
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -259,9 +252,8 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 	}
 
 	@Override
-	public void setConnection(Connection connection_) {
-
-		connection = connection_;
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override

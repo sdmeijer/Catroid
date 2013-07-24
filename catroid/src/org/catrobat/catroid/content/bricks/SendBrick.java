@@ -121,9 +121,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public View getViewWithAlpha(int alphaValue) {
-
 		if (view != null) {
-
 			LinearLayout layout = (LinearLayout) view.findViewById(R.id.brick_send_layout);
 			Drawable background = layout.getBackground();
 			background.setAlpha(alphaValue);
@@ -134,11 +132,8 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 			editLetter.setTextColor(editLetter.getTextColors().withAlpha(alphaValue));
 			editLetter.getBackground().setAlpha(alphaValue);
 			editLetter.setText(String.valueOf(letter));
-
 			this.alphaValue = (alphaValue);
-
 		}
-
 		return view;
 	}
 
@@ -156,7 +151,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SendBrick(sprite, sendBeginBrick);
+		return new SendBrick(getSprite(), sendBeginBrick);
 	}
 
 	@Override
@@ -247,7 +242,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public void initialize() {
-		Log.w("SendBrick", "Cannot create the IfLogic Bricks from here!");
+		Log.w("SendBrick", "Cannot create the Send Bricks from here!");
 	}
 
 	@Override
@@ -265,7 +260,7 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 		if (sorted) {
 			nestingBrickList.add(sendBeginBrick);
 			nestingBrickList.add(this);
-			nestingBrickList.add(sendEndBrick);
+			//nestingBrickList.add(sendEndBrick);
 		} else {
 			//nestingBrickList.add(this);
 			nestingBrickList.add(sendBeginBrick);

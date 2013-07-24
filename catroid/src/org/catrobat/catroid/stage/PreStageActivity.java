@@ -61,7 +61,6 @@ public class PreStageActivity extends Activity {
 	private static LegoNXT legoNXT;
 	private ProgressDialog connectingProgressDialog;
 	private static TextToSpeech textToSpeech;
-	private static PcConnectionManager connect_man;
 	private static OnUtteranceCompletedListenerContainer onUtteranceCompletedListenerContainer;
 
 	private boolean autoConnect = false;
@@ -96,18 +95,17 @@ public class PreStageActivity extends Activity {
 			}
 		}
 		if ((required_resources & Brick.CONNECTION_TO_PC) > 0) {
-
-			connect_man = PcConnectionManager.getInstance(null);
-			connect_man.getRequestedIps();
-			if (!connect_man.setUpConnections() || !connect_man.addConnectionsToBricks()) {
-				connect_man.cancelConnections();
+			final PcConnectionManager connectMan = PcConnectionManager.getInstance(null);
+			connectMan.getRequestedIps();
+			if (!connectMan.setUpConnections() || !connectMan.addConnectionsToBricks()) {
+				connectMan.cancelConnections();
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setMessage(getString(R.string.connection_to_pc_failed)).setCancelable(false)
 						.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int id) {
-								connect_man.broadcast();
-								connect_man.increaseSocketTimeout();
+								connectMan.broadcast();
+								connectMan.increaseSocketTimeout();
 								dialog.cancel();
 								resourceFailed();
 							}
@@ -148,8 +146,9 @@ public class PreStageActivity extends Activity {
 		if (legoNXT != null) {
 			legoNXT.pauseCommunicator();
 		}
-		if (connect_man != null) {
-			connect_man.cancelConnections();
+		PcConnectionManager connectMan = PcConnectionManager.getInstance(null);
+		if (connectMan != null) {
+			connectMan.cancelConnections();
 		}
 	}
 

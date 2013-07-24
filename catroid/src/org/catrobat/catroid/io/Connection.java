@@ -30,8 +30,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class Connection extends Thread {
 	public static enum connectionState {
 		UNDEFINED, CONNECTED, UNCONNECTED
@@ -45,9 +43,10 @@ public class Connection extends Thread {
 	private connectionState state;
 	private PcConnectionManager connectionManager;
 	private Connection thisThread;
+	private final int port = 63000;
 
-	public Connection(String ip_, PcConnectionManager connect) {
-		ip = ip_;
+	public Connection(String ip, PcConnectionManager connect) {
+		this.ip = ip;
 		client = null;
 		state = connectionState.UNDEFINED;
 		connectionManager = connect;
@@ -58,37 +57,17 @@ public class Connection extends Thread {
 	@Override
 	public void run() {
 		initialize();
-		//Send an 'a'
-		Command test_single_key = new Command('a', Command.commandType.SINGLE_KEY);
-		int[] comb = new int[3];
-		comb[0] = 17;
-		comb[1] = 14;
-		comb[2] = 'z';
-		//Send ctrl + shift + z (redo)
-		/*
-		 * Command test_key_comb = new Command(comb, Command.commandType.KEY_COMBINATION);
-		 * try {
-		 * if (objectOutput != null) {
-		 * objectOutput.writeObject(test_single_key);
-		 * }
-		 * } catch (IOException e1) {
-		 * e1.printStackTrace();
-		 * }
-		 */
 		while (thisThread == this) {
 
 			if (commandList.size() > 0) {
 				sendCommand();
 			} else {
-				Thread.yield();
+				try {
+					Thread.sleep(1000L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-			try {
-				Thread.sleep(1000L);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			//TODO handle in/output
 		}
 	}
 
@@ -99,7 +78,7 @@ public class Connection extends Thread {
 		try {
 			if (ip != null) {
 				client = new Socket();
-				client.connect(new InetSocketAddress(ip, 63000), connectionManager.getSocketTimeout());
+				client.connect(new InetSocketAddress(ip, port), connectionManager.getSocketTimeout());
 			} else {
 				state = connectionState.UNCONNECTED;
 				return;
@@ -127,14 +106,13 @@ public class Connection extends Thread {
 	}
 
 	public void sendCommand() {
-		Command actual_command = commandList.get(0);
-		Log.v("Reeesl", "send: " + actual_command.getKey() + "\n");
+		Command actualCommand = commandList.get(0);
 		try {
-			objectOutput.writeObject(actual_command);
+			objectOutput.writeObject(actualCommand);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		commandList.remove(actual_command);
+		commandList.remove(actualCommand);
 	}
 
 	public void stopThread() {
@@ -156,6 +134,5 @@ public class Connection extends Thread {
 
 	public void addCommand(Command command) {
 		commandList.add(command);
-		Log.v("Reeesl", "add: " + command.getKey() + "\n");
 	}
 }

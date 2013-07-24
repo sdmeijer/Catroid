@@ -50,14 +50,14 @@ import android.widget.Toast;
 
 public class PcConnectionManager implements ConnectionRequest {
 	private static PcConnectionManager instance = null;
-	private final static int defaultSocketTimeout = 30;
-	private final static int port = 64000;
-	private static HashMap<String, Connection> connectionList;//zusammenlegen
-	private static ArrayList<SendToPcBrick> connectionRequestList;
-	private static ArrayList<String> ipRequestList;//zusammenlegen
-	private static ArrayList<String> availableIpList;
-	private static Context context;
-	private static int socketTimeout;
+	private final int defaultSocketTimeout = 30;
+	private final int port = 64000;
+	private static HashMap<String, Connection> connectionList;
+	private ArrayList<SendToPcBrick> connectionRequestList;
+	private ArrayList<String> ipRequestList;
+	private ArrayList<String> availableIpList;
+	private Context context;
+	private int socketTimeout;
 	private ProgressDialog connectingProgressDialog;
 
 	private PcConnectionManager() {
@@ -65,17 +65,17 @@ public class PcConnectionManager implements ConnectionRequest {
 		socketTimeout = defaultSocketTimeout;
 	}
 
-	public static PcConnectionManager getInstance(Context context_) {
+	public static PcConnectionManager getInstance(Context context) {
 		if (instance == null) {
 			instance = new PcConnectionManager();
 		}
-		if (context_ != null) {
-			context = context_;
+		if (context != null) {
+			instance.context = context;
 		}
 		return instance;
 	}
 
-	public static void initialize() {
+	public void initialize() {
 		connectionList = new HashMap<String, Connection>();
 		connectionRequestList = new ArrayList<SendToPcBrick>();
 		ipRequestList = new ArrayList<String>();
@@ -98,8 +98,6 @@ public class PcConnectionManager implements ConnectionRequest {
 							true);
 				}
 			});
-
-			// BROADCAST----------------------------------------------------------------
 			byte[] message = new byte[1];
 			String broadcastAdressString = getBroadcastAddress();
 			InetAddress broadcastAddressInet = stringToInetAddress(broadcastAdressString);
@@ -126,17 +124,14 @@ public class PcConnectionManager implements ConnectionRequest {
 				finishBroadcast(brickIpList);
 				return;
 			}
-
-			// RECEIVE-------------------------------------------------------------------
-			byte[] ip_addr_server = new byte[64];
-			DatagramPacket data_rec = new DatagramPacket(ip_addr_server, ip_addr_server.length);
+			byte[] ipAddrServer = new byte[64];
+			DatagramPacket dataRec = new DatagramPacket(ipAddrServer, ipAddrServer.length);
 			while (true) {
 				try {
-					dataSocket.receive(data_rec);
-					String ip_server = new String(ip_addr_server, 0, data_rec.getLength());
-					brickIpList.put(ip_server, data_rec.getSocketAddress().toString());
+					dataSocket.receive(dataRec);
+					String ipServer = new String(ipAddrServer, 0, dataRec.getLength());
+					brickIpList.put(ipServer, dataRec.getSocketAddress().toString());
 				} catch (IOException e) {
-					//e.printStackTrace();
 					if (brickIpList.size() == 0) {
 						activity = (Activity) context;
 						activity.runOnUiThread(new Runnable() {
@@ -172,7 +167,6 @@ public class PcConnectionManager implements ConnectionRequest {
 		int ipAddress = 0;
 		int netmask = 0;
 		ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-		//when hotspot activated, we need to hack a little to get ipadress and netmask
 		if (ipAddress == 0) {
 			InetAddress inetAddress = getIpForHotspot();
 			if (inetAddress != null) {
@@ -217,10 +211,10 @@ public class PcConnectionManager implements ConnectionRequest {
 
 	public int InetAddrToInt(InetAddress inetAddress) {
 		int inetAddressInt = 0;
-		byte[] inet_byte = inetAddress.getAddress();
+		byte[] inetByte = inetAddress.getAddress();
 		for (int i = 0; i < 4; i++) {
 			int shift = (4 - 1 - i) * 8;
-			inetAddressInt += (inet_byte[3 - i] & 0x000000FF) << shift;
+			inetAddressInt += (inetByte[3 - i] & 0x000000FF) << shift;
 		}
 		return inetAddressInt;
 	}
@@ -268,7 +262,6 @@ public class PcConnectionManager implements ConnectionRequest {
 	}
 
 	public void getRequestedIps() {
-
 		Iterator<SendToPcBrick> it = connectionRequestList.iterator();
 		ipRequestList.clear();
 		SendToPcBrick brick = null;
@@ -280,7 +273,6 @@ public class PcConnectionManager implements ConnectionRequest {
 				ipRequestList.add(ip);
 			}
 		}
-
 	}
 
 	public boolean setUpConnections() {
@@ -353,9 +345,9 @@ public class PcConnectionManager implements ConnectionRequest {
 		Iterator<Entry<String, String>> it = brickIpList.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, String> pairs = it.next();
-			String this_element = pairs.getKey();
-			if (!availableIpList.contains(this_element)) {
-				availableIpList.add(this_element);
+			String ip = pairs.getKey();
+			if (!availableIpList.contains(ip)) {
+				availableIpList.add(ip);
 			}
 		}
 	}
@@ -383,7 +375,7 @@ public class PcConnectionManager implements ConnectionRequest {
 	}
 
 	public interface Broadcast {
-		public void setIpList(HashMap<String, String> ip_list);
+		public void setIpList(HashMap<String, String> ipList);
 
 		public void setConnection(Connection connection);
 	}

@@ -33,12 +33,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public abstract class SendBeginBrick extends NestingBrick {
 	private static final long serialVersionUID = 1L;
-
 	protected SendBrick sendBrick;
 	protected SendEndBrick sendEndBrick;
 	private transient long beginSendTime;
 	private transient ArrayList<Integer> commandList;
-
 	private transient SendBeginBrick copy;
 
 	protected SendBeginBrick() {
@@ -68,8 +66,8 @@ public abstract class SendBeginBrick extends NestingBrick {
 		return sendBrick;
 	}
 
-	public void setSendBrick(SendBrick sendBrick_) {
-		this.sendBrick = sendBrick_;
+	public void setSendBrick(SendBrick sendBrick) {
+		this.sendBrick = sendBrick;
 	}
 
 	@Override
@@ -113,8 +111,6 @@ public abstract class SendBeginBrick extends NestingBrick {
 
 	@Override
 	public List<SequenceAction> addActionToSequence(SequenceAction sequence) {
-		//Action action = ExtendedActions.sendBegin(sprite, this);
-		//sequence.addAction(action);
 		return null;
 	}
 
