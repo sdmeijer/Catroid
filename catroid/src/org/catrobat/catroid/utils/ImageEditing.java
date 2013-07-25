@@ -163,7 +163,7 @@ public class ImageEditing {
 			return calculateScaleFactor(options.outWidth, options.outHeight, ScreenValues.SCREEN_WIDTH,
 					ScreenValues.SCREEN_HEIGHT, true);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("resource is not an image");
 		}
 	}
 

@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.Constants;
@@ -227,12 +228,14 @@ public class UtilFile {
 		}
 	}
 
-	public static File copyFromResourceIntoProject(String projectName, String directoryInProject, String outputName,
-			int resourceId, Context context, boolean prependMd5ToFilename) throws IOException {
+	public static File copyFromResourceIntoProject(String projectName, String directoryInProject,
+			String outputFilename, int resourceId, Context context, boolean prependMd5ToFilename) throws IOException {
 		String directoryPath = Utils.buildPath(Utils.buildProjectPath(projectName), directoryInProject);
-		File copiedFile = new File(directoryPath, outputName);
+		File copiedFile = new File(directoryPath, outputFilename);
 		if (!copiedFile.exists()) {
 			copiedFile.createNewFile();
+		} else {
+			throw new IllegalArgumentException("file with that name already exists!");
 		}
 		InputStream in = context.getResources().openRawResource(resourceId);
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(copiedFile), Constants.BUFFER_8K);
@@ -253,19 +256,26 @@ public class UtilFile {
 		return prependMd5ToFilename(copiedFile);
 	}
 
-	public static File copySoundFromResourceIntoProject(String projectName, String outputName, int resourceId,
+	public static File copySoundFromResourceIntoProject(String projectName, String outputFilename, int resourceId,
 			Context context, boolean prependMd5ToFilename) throws IOException {
-		return copyFromResourceIntoProject(projectName, Constants.SOUND_DIRECTORY, outputName, resourceId, context,
+		if (!outputFilename.toLowerCase(Locale.US).endsWith(Constants.RECORDING_EXTENTION)) {
+			outputFilename = outputFilename + Constants.RECORDING_EXTENTION;
+		}
+		return copyFromResourceIntoProject(projectName, Constants.SOUND_DIRECTORY, outputFilename, resourceId, context,
 				prependMd5ToFilename);
 	}
 
-	public static File copyImageFromResourceIntoProject(String projectName, String outputName, int resourceId,
+	public static File copyImageFromResourceIntoProject(String projectName, String outputFilename, int resourceId,
 			Context context, boolean prependMd5ToFilename, double scaleFactor) throws IOException {
-		if (scaleFactor <= 0 || context.getResources().getResourceTypeName(resourceId).compareTo("drawable") == 0) {
+		if (scaleFactor <= 0) {
 			throw new IllegalArgumentException("scale factor is smaller or equal zero");
 		}
-		File copiedFile = copyFromResourceIntoProject(projectName, Constants.IMAGE_DIRECTORY, outputName, resourceId,
-				context, false);
+		outputFilename = Utils.deleteSpecialCharactersInString(outputFilename);
+		if (!outputFilename.toLowerCase(Locale.US).endsWith(Constants.IMAGE_STANDARD_EXTENTION)) {
+			outputFilename = outputFilename + Constants.IMAGE_STANDARD_EXTENTION;
+		}
+		File copiedFile = copyFromResourceIntoProject(projectName, Constants.IMAGE_DIRECTORY, outputFilename,
+				resourceId, context, false);
 
 		ImageEditing.scaleImageFile(copiedFile, scaleFactor);
 
@@ -276,10 +286,13 @@ public class UtilFile {
 		return prependMd5ToFilename(copiedFile);
 	}
 
-	private static File prependMd5ToFilename(File file) {
-		File fileWithMd5 = new File(file.getAbsolutePath(), Utils.md5Checksum(file) + Constants.FILENAME_SEPARATOR
-				+ file.getName());
-		file.renameTo(fileWithMd5);
+	private static File prependMd5ToFilename(File file) throws IOException {
+		File fileWithMd5 = new File(file.getParent(), Utils.md5Checksum(file)
+				+ Constants.FILENAME_SEPARATOR + file.getName());
+		if (!file.renameTo(fileWithMd5)) {
+			throw new IOException("renaming file " + file.getAbsoluteFile() + " to "
+					+ fileWithMd5.getAbsoluteFile() + " failed");
+		}
 		return fileWithMd5;
 	}
 

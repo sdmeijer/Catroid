@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.locks.Lock;
@@ -653,8 +654,8 @@ public class LookFragment extends ScriptActivityFragment implements OnLookEditLi
 			String newFileName = oldFileName.substring(oldFileName.indexOf('_') + 1);
 
 			//HACK for https://github.com/Catrobat/Catroid/issues/81
-			if (!newFileName.endsWith(".png")) {
-				newFileName = newFileName + ".png";
+			if (!newFileName.toLowerCase(Locale.US).endsWith(Constants.IMAGE_STANDARD_EXTENTION)) {
+				newFileName = newFileName + Constants.IMAGE_STANDARD_EXTENTION;
 			}
 
 			String projectName = ProjectManager.getInstance().getCurrentProject().getName();

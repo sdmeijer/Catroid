@@ -66,11 +66,13 @@ public class StandardProjectHandler {
 	}
 
 	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
-		String mole1Name = context.getString(R.string.default_project_sprites_mole_name) + " 1";
-		String mole2Name = context.getString(R.string.default_project_sprites_mole_name) + " 2";
-		String mole3Name = context.getString(R.string.default_project_sprites_mole_name) + " 3";
-		String mole4Name = context.getString(R.string.default_project_sprites_mole_name) + " 4";
-		String whackedMoleName = context.getString(R.string.default_project_sprites_mole_whacked);
+		String moleLookName = context.getString(R.string.default_project_sprites_mole_name);
+		String mole1Name = moleLookName + " 1";
+		String mole2Name = moleLookName + " 2";
+		String mole3Name = moleLookName + " 3";
+		String mole4Name = moleLookName + " 4";
+		String whackedMoleLookName = context.getString(R.string.default_project_sprites_mole_whacked);
+		String movingMoleLookName = context.getString(R.string.default_project_sprites_mole_moving);
 		String soundName = context.getString(R.string.default_project_sprites_mole_sound);
 		String backgroundName = context.getString(R.string.default_project_backgroundname);
 
@@ -85,36 +87,40 @@ public class StandardProjectHandler {
 		backgroundImageScaleFactor = ImageEditing.calculateScaleFactorToScreenSize(
 				R.drawable.default_project_background, context);
 
-		File backgroundFile = UtilFile.copyImageFromResourceIntoProject(projectName, backgroundName,
-				R.drawable.default_project_background, context, true, backgroundImageScaleFactor);
-		File mole1File = UtilFile.copyImageFromResourceIntoProject(projectName, mole1Name,
-				R.drawable.default_project_mole_1, context, true, backgroundImageScaleFactor);
-		File mole2File = UtilFile.copyImageFromResourceIntoProject(projectName, mole2Name,
-				R.drawable.default_project_mole_2, context, true, backgroundImageScaleFactor);
-		File whackedMoleFile = UtilFile.copyImageFromResourceIntoProject(projectName, whackedMoleName,
-				R.drawable.default_project_mole_whacked, context, true, backgroundImageScaleFactor);
-		File soundFile1 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName,
-				R.raw.default_project_sound_mole_1, context, true);
-		File soundFile2 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName,
-				R.raw.default_project_sound_mole_2, context, true);
-		File soundFile3 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName,
-				R.raw.default_project_sound_mole_3, context, true);
-		File soundFile4 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName,
-				R.raw.default_project_sound_mole_4, context, true);
+		File backgroundFile = UtilFile.copyImageFromResourceIntoProject(projectName, backgroundName
+				+ Constants.IMAGE_STANDARD_EXTENTION, R.drawable.default_project_background, context, true,
+				backgroundImageScaleFactor);
+		File movingMoleFile = UtilFile.copyImageFromResourceIntoProject(projectName, movingMoleLookName
+				+ Constants.IMAGE_STANDARD_EXTENTION, R.drawable.default_project_mole_moving, context, true,
+				backgroundImageScaleFactor);
+		File diggedOutMoleFile = UtilFile.copyImageFromResourceIntoProject(projectName, moleLookName
+				+ Constants.IMAGE_STANDARD_EXTENTION, R.drawable.default_project_mole_digged_out, context, true,
+				backgroundImageScaleFactor);
+		File whackedMoleFile = UtilFile.copyImageFromResourceIntoProject(projectName, whackedMoleLookName
+				+ Constants.IMAGE_STANDARD_EXTENTION, R.drawable.default_project_mole_whacked, context, true,
+				backgroundImageScaleFactor);
+		File soundFile1 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName + "1"
+				+ Constants.RECORDING_EXTENTION, R.raw.default_project_sound_mole_1, context, true);
+		File soundFile2 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName + "2"
+				+ Constants.RECORDING_EXTENTION, R.raw.default_project_sound_mole_2, context, true);
+		File soundFile3 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName + "3"
+				+ Constants.RECORDING_EXTENTION, R.raw.default_project_sound_mole_3, context, true);
+		File soundFile4 = UtilFile.copySoundFromResourceIntoProject(projectName, soundName + "4"
+				+ Constants.RECORDING_EXTENTION, R.raw.default_project_sound_mole_4, context, true);
 		UtilFile.copyFromResourceIntoProject(projectName, ".", StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME,
 				R.drawable.default_project_screenshot, context, false);
 
-		LookData moleLookData1 = new LookData();
-		moleLookData1.setLookName(mole1Name);
-		moleLookData1.setLookFilename(mole1File.getName());
+		LookData movingMoleLookData = new LookData();
+		movingMoleLookData.setLookName(movingMoleLookName);
+		movingMoleLookData.setLookFilename(movingMoleFile.getName());
 
-		LookData moleLookData2 = new LookData();
-		moleLookData2.setLookName(mole2Name);
-		moleLookData2.setLookFilename(mole2File.getName());
+		LookData diggedOutMoleLookData = new LookData();
+		diggedOutMoleLookData.setLookName(moleLookName);
+		diggedOutMoleLookData.setLookFilename(diggedOutMoleFile.getName());
 
-		LookData moleLookDataWhacked = new LookData();
-		moleLookDataWhacked.setLookName(whackedMoleName);
-		moleLookDataWhacked.setLookFilename(whackedMoleFile.getName());
+		LookData whackedMoleLookData = new LookData();
+		whackedMoleLookData.setLookName(whackedMoleLookName);
+		whackedMoleLookData.setLookFilename(whackedMoleFile.getName());
 
 		LookData backgroundLookData = new LookData();
 		backgroundLookData.setLookName(backgroundName);
@@ -160,9 +166,9 @@ public class StandardProjectHandler {
 
 		// Mole 1 sprite
 		Sprite mole1Sprite = new Sprite(mole1Name);
-		mole1Sprite.getLookDataList().add(moleLookData1);
-		mole1Sprite.getLookDataList().add(moleLookData2);
-		mole1Sprite.getLookDataList().add(moleLookDataWhacked);
+		mole1Sprite.getLookDataList().add(movingMoleLookData);
+		mole1Sprite.getLookDataList().add(diggedOutMoleLookData);
+		mole1Sprite.getLookDataList().add(whackedMoleLookData);
 		mole1Sprite.getSoundList().add(soundInfo);
 
 		Script mole1StartScript = new StartScript(mole1Sprite);
@@ -186,7 +192,7 @@ public class StandardProjectHandler {
 		mole1StartScript.addBrick(showBrick);
 
 		setLookBrick = new SetLookBrick(mole1Sprite);
-		setLookBrick.setLook(moleLookData1);
+		setLookBrick.setLook(movingMoleLookData);
 		mole1StartScript.addBrick(setLookBrick);
 
 		GlideToBrick glideToBrick = new GlideToBrick(mole1Sprite, calculateValueRelativeToScaledBackground(-160),
@@ -194,7 +200,7 @@ public class StandardProjectHandler {
 		mole1StartScript.addBrick(glideToBrick);
 
 		setLookBrick = new SetLookBrick(mole1Sprite);
-		setLookBrick.setLook(moleLookData2);
+		setLookBrick.setLook(diggedOutMoleLookData);
 		mole1StartScript.addBrick(setLookBrick);
 
 		waitBrick = new WaitBrick(mole1Sprite, randomWait.clone());
@@ -215,7 +221,7 @@ public class StandardProjectHandler {
 		mole1WhenScript.addBrick(playSoundBrick);
 
 		setLookBrick = new SetLookBrick(mole1Sprite);
-		setLookBrick.setLook(moleLookDataWhacked);
+		setLookBrick.setLook(whackedMoleLookData);
 		mole1WhenScript.addBrick(setLookBrick);
 
 		waitBrick = new WaitBrick(mole1Sprite, 1500);
