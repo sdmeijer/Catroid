@@ -917,7 +917,6 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener, On
 						List<NestingBrick> list = ((NestingBrick) brick).getAllNestingBrickParts(true);
 						for (Brick tempBrick : list) {
 							animatedBricks.add(tempBrick);
-							Log.v("Reeesl", "added");
 						}
 					}
 					notifyDataSetChanged();
