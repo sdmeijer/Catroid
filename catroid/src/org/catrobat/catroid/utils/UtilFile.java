@@ -29,6 +29,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -223,6 +225,62 @@ public class UtilFile {
 				outputStream.close();
 			}
 		}
+	}
+
+	public static File copyFromResourceIntoProject(String projectName, String directoryInProject, String outputName,
+			int resourceId, Context context, boolean prependMd5ToFilename) throws IOException {
+		String directoryPath = Utils.buildPath(Utils.buildProjectPath(projectName), directoryInProject);
+		File copiedFile = new File(directoryPath, outputName);
+		if (!copiedFile.exists()) {
+			copiedFile.createNewFile();
+		}
+		InputStream in = context.getResources().openRawResource(resourceId);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(copiedFile), Constants.BUFFER_8K);
+		byte[] buffer = new byte[Constants.BUFFER_8K];
+		int length = 0;
+		while ((length = in.read(buffer)) > 0) {
+			out.write(buffer, 0, length);
+		}
+
+		in.close();
+		out.flush();
+		out.close();
+
+		if (!prependMd5ToFilename) {
+			return copiedFile;
+		}
+
+		return prependMd5ToFilename(copiedFile);
+	}
+
+	public static File copySoundFromResourceIntoProject(String projectName, String outputName, int resourceId,
+			Context context, boolean prependMd5ToFilename) throws IOException {
+		return copyFromResourceIntoProject(projectName, Constants.SOUND_DIRECTORY, outputName, resourceId, context,
+				prependMd5ToFilename);
+	}
+
+	public static File copyImageFromResourceIntoProject(String projectName, String outputName, int resourceId,
+			Context context, boolean prependMd5ToFilename, double scaleFactor) throws IOException {
+		if (scaleFactor <= 0 || context.getResources().getResourceTypeName(resourceId).compareTo("drawable") == 0) {
+			throw new IllegalArgumentException("scale factor is smaller or equal zero");
+		}
+		File copiedFile = copyFromResourceIntoProject(projectName, Constants.IMAGE_DIRECTORY, outputName, resourceId,
+				context, false);
+
+		ImageEditing.scaleImageFile(copiedFile, scaleFactor);
+
+		if (!prependMd5ToFilename) {
+			return copiedFile;
+		}
+
+		return prependMd5ToFilename(copiedFile);
+	}
+
+	private static File prependMd5ToFilename(File file) {
+		File fileWithMd5 = new File(file.getAbsolutePath(), Utils.md5Checksum(file) + Constants.FILENAME_SEPARATOR
+				+ file.getName());
+		file.renameTo(fileWithMd5);
+		return fileWithMd5;
 	}
 
 }

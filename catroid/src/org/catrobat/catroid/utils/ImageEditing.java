@@ -25,8 +25,10 @@ package org.catrobat.catroid.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.io.StorageHandler;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -149,5 +151,31 @@ public class ImageEditing {
 				(int) (originalBackgroundImageDimensions[0] * scaleFactor),
 				(int) (originalBackgroundImageDimensions[1] * scaleFactor), false);
 		StorageHandler.saveBitmapToImageFile(file, scaledBitmap);
+	}
+
+	public static double calculateScaleFactorToScreenSize(int resourceId, Context context) {
+		if (context.getResources().getResourceTypeName(resourceId).compareTo("drawable") == 0) {
+			//AssetFileDescriptor file = context.getResources().openRawResourceFd(resourceId);
+			//getImageDimensions(file);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeResource(context.getResources(), resourceId, options);
+			return calculateScaleFactor(options.outWidth, options.outHeight, ScreenValues.SCREEN_WIDTH,
+					ScreenValues.SCREEN_HEIGHT, true);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	public static double calculateScaleFactor(int originalWidth, int originalHeight, int newWidth, int newHeight,
+			boolean fillOutWholeNewArea) {
+		double widthScaleFactor = ((double) newWidth) / ((double) originalWidth);
+		double heightScaleFactor = ((double) newHeight) / ((double) originalHeight);
+
+		if (fillOutWholeNewArea) {
+			return Math.max(widthScaleFactor, heightScaleFactor);
+		} else {
+			return Math.min(widthScaleFactor, heightScaleFactor);
+		}
 	}
 }
