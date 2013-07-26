@@ -117,7 +117,7 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 						&& !current.equals(parent.getContext().getString(R.string.empty))) {
 					String key = (String) sendSpinner.getItemAtPosition(position);
 					if (availableIps.containsKey(key)) {
-						ipToConnect = stripPort(availableIps.get(key));
+						ipToConnect = availableIps.get(key);
 					}
 				} else {
 					ipToConnect = null;
@@ -231,7 +231,7 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 					Entry<String, String> pairs = it.next();
 					String ip = pairs.getKey();
 					dataAdapter.add(ip);
-					availableIps.put(pairs.getKey(), pairs.getValue());
+					availableIps.put(pairs.getKey(), stripPort(pairs.getValue()));
 				}
 				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				sendSpinner.setAdapter(dataAdapter);
@@ -245,6 +245,10 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 				dataAdapter.add(context.getString(R.string.scan));
 			}
 		});
+	}
+
+	public HashMap<String, String> getIpServerList() {
+		return availableIps;
 	}
 
 	public String getIp() {

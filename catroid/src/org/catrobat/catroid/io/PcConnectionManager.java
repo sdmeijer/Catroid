@@ -39,6 +39,7 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.bricks.SendToPcBrick;
 import org.catrobat.catroid.content.bricks.SendToPcBrick.ConnectionRequest;
 import org.catrobat.catroid.io.Connection.connectionState;
+import org.catrobat.catroid.stage.StageActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -59,6 +60,7 @@ public class PcConnectionManager implements ConnectionRequest {
 	private Context context;
 	private int socketTimeout;
 	private ProgressDialog connectingProgressDialog;
+	private StageActivity stageActivity;
 
 	private PcConnectionManager() {
 		initialize();
@@ -282,8 +284,13 @@ public class PcConnectionManager implements ConnectionRequest {
 		boolean returnValue = false;
 		while (it.hasNext()) {
 			ip = it.next();
-			newConnection = new Connection(ip, this);
-			newConnection.start();
+			String server = getNameToIp(ip);
+			if (server != null) {
+				newConnection = new Connection(ip, this, server);
+				newConnection.start();
+			} else {
+				return false;
+			}
 			while (true) {
 				connectionState state = newConnection.getConnectionState();
 				switch (state) {
@@ -309,6 +316,22 @@ public class PcConnectionManager implements ConnectionRequest {
 			connectionList.put(ip, newConnection);
 		}
 		return returnValue;
+	}
+
+	public String getNameToIp(String ip) {
+		if (connectionRequestList.size() == 0) {
+			return null;
+		}
+		SendToPcBrick brick = connectionRequestList.get(0);
+		HashMap<String, String> serverList = brick.getIpServerList();
+		Iterator<Entry<String, String>> it = serverList.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, String> pairs = it.next();
+			if (pairs.getValue().equals(ip)) {
+				return pairs.getKey();
+			}
+		}
+		return null;
 	}
 
 	public void cancelConnections() {
@@ -360,6 +383,14 @@ public class PcConnectionManager implements ConnectionRequest {
 		if (socketTimeout < 3000) {
 			socketTimeout *= 10;
 		}
+	}
+
+	public void setStageActivity(StageActivity stageActivity) {
+		this.stageActivity = stageActivity;
+	}
+
+	public StageActivity getStageActivity() {
+		return stageActivity;
 	}
 
 	@Override

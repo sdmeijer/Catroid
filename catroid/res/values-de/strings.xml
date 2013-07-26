@@ -9,7 +9,7 @@
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
  *  
- *  An additional term exception under section 7 of the GNU Affero
+ *  An additional term exception under section 7 of the GNU Afferofr
  *  General Public License, version 3, is available at
  *  http://developer.catrobat.org/license_additional_term
  *  
@@ -464,6 +464,8 @@
 
 	<!-- Pc Connections -->
     <string name="no_devices_found">Es wurden keine Geräte gefunden.</string>
+    <string name="connection_broke_1">Verbindung zu \"</string>
+    <string name="connection_broke_2">\" ist abegebrochen.</string>
     <!--  -->
 
     <!-- Lego Mindstorms Strings -->

@@ -26,6 +26,7 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
+import org.catrobat.catroid.io.PcConnectionManager;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
 
 import android.content.pm.ActivityInfo;
@@ -52,6 +53,7 @@ public class StageActivity extends AndroidApplication {
 		stageListener = new StageListener();
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		calculateScreenSizes();
+		PcConnectionManager.getInstance(null).setStageActivity(this);
 		initialize(stageListener, true);
 	}
 
