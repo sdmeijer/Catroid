@@ -22,9 +22,13 @@
  */
 package org.catrobat.catroid.content.actions;
 
+import java.io.File;
 import java.util.HashMap;
 
+import org.catrobat.catroid.common.Constants;
+import org.catrobat.catroid.io.SoundManager;
 import org.catrobat.catroid.stage.PreStageActivity;
+import org.catrobat.catroid.utils.Utils;
 
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
@@ -38,6 +42,8 @@ public class SpeakAction extends Action {
 	private boolean executeOnce = true;
 	private boolean speakFinished = false;
 
+	private File pathToSpeechFile;
+
 	@Override
 	public boolean act(float delta) {
 		if (executeOnce) {
@@ -45,18 +51,16 @@ public class SpeakAction extends Action {
 
 				@Override
 				public void onUtteranceCompleted(String utteranceId) {
+					SoundManager.getInstance().playSoundFile(pathToSpeechFile.getAbsolutePath());
 					speakFinished = true;
 				}
 			};
 			HashMap<String, String> speakParameter = new HashMap<String, String>();
 			speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, String.valueOf(utteranceIdPool++));
-			PreStageActivity.textToSpeech(text, listener, speakParameter);
+			PreStageActivity.textToSpeech(text, pathToSpeechFile, listener, speakParameter);
 			executeOnce = false;
 		}
-		if (speakFinished) {
-			return true;
-		}
-		return false;
+		return speakFinished;
 	}
 
 	@Override
@@ -66,7 +70,12 @@ public class SpeakAction extends Action {
 	}
 
 	public void setText(String text) {
+		if (text == null) {
+			text = "";
+		}
 		this.text = text;
-	}
 
+		String fileName = Utils.md5Checksum(text);
+		pathToSpeechFile = new File(Constants.TEXT_TO_SPEECH_TMP_PATH, fileName + Constants.TEXT_TO_SPEECH_EXTENSION);
+	}
 }

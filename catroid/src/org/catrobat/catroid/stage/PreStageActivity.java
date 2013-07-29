@@ -22,6 +22,7 @@
  */
 package org.catrobat.catroid.stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -50,11 +51,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class PreStageActivity extends Activity {
+	private static final String TAG = PreStageActivity.class.getSimpleName();
 
 	private static final int REQUEST_ENABLE_BLUETOOTH = 2000;
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
-	public static final int REQUEST_RESOURCES_INIT = 0101;
-	public static final int REQUEST_TEXT_TO_SPEECH = 0;
+	public static final int REQUEST_RESOURCES_INIT = 101;
+	public static final int REQUEST_TEXT_TO_SPEECH = 10;
 
 	private int requiredResourceCounter;
 	private static LegoNXT legoNXT;
@@ -255,7 +257,7 @@ public class PreStageActivity extends Activity {
 		}
 	}
 
-	public static void textToSpeech(String text, OnUtteranceCompletedListener listener,
+	public static void textToSpeech(String text, File pathToSoundFile, OnUtteranceCompletedListener listener,
 			HashMap<String, String> speakParameter) {
 		if (text == null) {
 			text = "";
@@ -263,7 +265,11 @@ public class PreStageActivity extends Activity {
 
 		onUtteranceCompletedListenerContainer.addOnUtteranceCompletedListener(listener,
 				speakParameter.get(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID));
-		textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speakParameter);
+
+		int error = textToSpeech.synthesizeToFile(text, speakParameter, pathToSoundFile.getAbsolutePath());
+		if (error == TextToSpeech.ERROR) {
+			Log.e(TAG, "File synthesizing failed");
+		}
 	}
 
 	//messages from Lego NXT device can be handled here
