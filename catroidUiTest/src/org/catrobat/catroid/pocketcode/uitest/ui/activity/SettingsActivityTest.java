@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.pocketcode.uitest.ui;
+package org.catrobat.catroid.pocketcode.uitest.ui.activity;
 
 import org.catrobat.catroid.pocketcode.R;
 import org.catrobat.catroid.pocketcode.ui.MainMenuActivity;

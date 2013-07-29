@@ -28,6 +28,7 @@ import org.catrobat.catroid.pocketcode.content.Project;
 import org.catrobat.catroid.pocketcode.ui.MainMenuActivity;
 import org.catrobat.catroid.pocketcode.ui.ProjectActivity;
 import org.catrobat.catroid.pocketcode.ui.dialogs.NewProjectDialog;
+import org.catrobat.catroid.pocketcode.uitest.annotation.Device;
 import org.catrobat.catroid.pocketcode.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.pocketcode.uitest.util.UiTestUtils;
 
@@ -62,6 +63,7 @@ public class NewProjectDialogTest extends BaseActivityInstrumentationTestCase<Ma
 		ProjectManager.getInstance().deleteCurrentProject();
 	}
 
+	@Device
 	public void testNewProjectDialog() {
 		String buttonOkText = solo.getString(R.string.ok);
 		solo.clickOnButton(solo.getString(R.string.main_menu_new));
@@ -91,7 +93,7 @@ public class NewProjectDialogTest extends BaseActivityInstrumentationTestCase<Ma
 		Button okButton = solo.getButton(getActivity().getString(R.string.ok));
 		EditText editText = (EditText) solo.getView(R.id.project_name_edittext);
 
-		assertTrue("EditText was not empty", editText.getText().length() == 0);
+		assertTrue("EditText was not empty", editText.length() == 0);
 
 		final String projectName = "MyTestProject";
 		UiTestUtils.enterText(solo, 0, projectName);
@@ -127,6 +129,7 @@ public class NewProjectDialogTest extends BaseActivityInstrumentationTestCase<Ma
 
 	}
 
+	@Device
 	public void testCreateEmptyProject() {
 		solo.clickOnButton(solo.getString(R.string.main_menu_new));
 		UiTestUtils.waitForText(solo, solo.getString(R.string.new_project_dialog_title));

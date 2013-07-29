@@ -33,6 +33,7 @@ import org.catrobat.catroid.pocketcode.content.bricks.SetVariableBrick;
 import org.catrobat.catroid.pocketcode.formulaeditor.UserVariablesContainer;
 import org.catrobat.catroid.pocketcode.stage.StageActivity;
 import org.catrobat.catroid.pocketcode.ui.MainMenuActivity;
+import org.catrobat.catroid.pocketcode.uitest.annotation.Device;
 import org.catrobat.catroid.pocketcode.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.pocketcode.uitest.util.UiTestUtils;
 
@@ -68,6 +69,7 @@ public class VariableBricksTest extends BaseActivityInstrumentationTestCase<Main
 	}
 
 	@Smoke
+	@Device
 	public void testVariableBricks() {
 		Spinner setVariableSpinner = solo.getCurrentViews(Spinner.class).get(0);
 		Spinner changeVariableSpinner = solo.getCurrentViews(Spinner.class).get(1);

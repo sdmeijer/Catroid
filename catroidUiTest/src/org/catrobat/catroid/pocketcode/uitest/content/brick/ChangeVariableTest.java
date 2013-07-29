@@ -38,6 +38,7 @@ import org.catrobat.catroid.pocketcode.ui.adapter.BrickAdapter;
 import org.catrobat.catroid.pocketcode.ui.dialogs.NewVariableDialog;
 import org.catrobat.catroid.pocketcode.ui.fragment.FormulaEditorFragment;
 import org.catrobat.catroid.pocketcode.ui.fragment.ScriptFragment;
+import org.catrobat.catroid.pocketcode.uitest.annotation.Device;
 import org.catrobat.catroid.pocketcode.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.pocketcode.uitest.util.Reflection;
 import org.catrobat.catroid.pocketcode.uitest.util.UiTestUtils;
@@ -66,6 +67,7 @@ public class ChangeVariableTest extends BaseActivityInstrumentationTestCase<Main
 	}
 
 	@Smoke
+	@Device
 	public void testCreateNewUserVariableAndDeletion() {
 		String userVariableName = "testVariable1";
 		String secondUserVariableName = "testVariable2";

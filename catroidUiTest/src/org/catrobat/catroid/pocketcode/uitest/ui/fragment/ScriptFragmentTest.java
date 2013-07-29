@@ -40,6 +40,7 @@ import org.catrobat.catroid.pocketcode.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.pocketcode.io.StorageHandler;
 import org.catrobat.catroid.pocketcode.ui.MainMenuActivity;
 import org.catrobat.catroid.pocketcode.ui.SettingsActivity;
+import org.catrobat.catroid.pocketcode.uitest.annotation.Device;
 import org.catrobat.catroid.pocketcode.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.pocketcode.uitest.util.UiTestUtils;
 
@@ -212,6 +213,7 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 	/**
 	 * Tests issue#54. https://github.com/Catrobat/Catroid/issues/54
 	 */
+
 	public void testOnlyAddControlBricks() {
 		UiTestUtils.createEmptyProject();
 		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
@@ -535,6 +537,7 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 		assertFalse("Found menu item '" + showDetails + "'", solo.waitForText(showDetails, 1, timeToWait, false, true));
 	}
 
+	@Device
 	public void testOptionsEnableLegoMindstormBricks() {
 		UiTestUtils.createTestProject();
 		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
@@ -554,9 +557,8 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 
 		solo.sleep(300);
 		solo.goBack();
-		assertEquals("Action bar navigation spinner doesn't show \'" + solo.getString(R.string.scripts) + "\'",
-				solo.getString(R.string.scripts), UiTestUtils.getActionbarSpinnerOnPreHoneyComb(solo).getSelectedItem()
-						.toString());
+		String currentSprite = ProjectManager.getInstance().getCurrentSprite().getName();
+		assertEquals("Current sprite name is not shown as actionbar title or is wrong", "cat", currentSprite);
 
 		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
 

@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.pocketcode.uitest.ui;
+package org.catrobat.catroid.pocketcode.uitest.ui.activity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +45,7 @@ import org.catrobat.catroid.pocketcode.ui.MyProjectsActivity;
 import org.catrobat.catroid.pocketcode.ui.ProjectActivity;
 import org.catrobat.catroid.pocketcode.ui.SettingsActivity;
 import org.catrobat.catroid.pocketcode.ui.fragment.ProjectsListFragment.ProjectData;
+import org.catrobat.catroid.pocketcode.uitest.annotation.Device;
 import org.catrobat.catroid.pocketcode.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.pocketcode.uitest.util.UiTestUtils;
 import org.catrobat.catroid.pocketcode.utils.UtilFile;
@@ -365,8 +366,10 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 
 		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		assertTrue("Standard Project should be restored", spriteList.size() == 5);
+		solo.sleep(3000);
 	}
 
+	@Device
 	public void testProjectsAndImagesVisible() {
 		createProjects();
 		solo.sleep(200);
@@ -421,6 +424,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		}
 	}
 
+	@Device
 	public void testImageCache() {
 		deleteCacheProjects = true;
 
@@ -587,6 +591,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Project was deleted!", solo.searchText(UiTestUtils.PROJECTNAME1));
 	}
 
+	@Device
 	public void testChooseNoOnDeleteQuestionInActionMode() {
 		createProjects();
 		solo.sleep(200);
@@ -704,6 +709,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getCurrentProject().getName());
 	}
 
+	@Device
 	public void testDeleteProjectViaActionBar() {
 		String delete = solo.getString(R.string.delete);
 		createProjects();
@@ -746,6 +752,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 
 	}
 
+	@Device
 	public void testConfirmDeleteProgramDialogTitleChange() {
 		String delete = solo.getString(R.string.delete);
 		createProjects();
@@ -780,6 +787,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnText(no);
 	}
 
+	@Device
 	public void testDeleteActionModeTitleChange() {
 		String deleteActionModeTitle = solo.getString(R.string.delete);
 		String singleItemAppendixDeleteActionMode = solo.getString(R.string.program);
@@ -793,15 +801,16 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 
 		UiTestUtils.openActionMode(solo, delete, R.id.delete, getActivity());
 
-		solo.clickOnCheckBox(1);
+		solo.clickOnCheckBox(0);
 		assertTrue("Actionbar title is not displayed correctly!",
 				solo.searchText(deleteActionModeTitle + " 1 " + singleItemAppendixDeleteActionMode));
-		solo.clickOnCheckBox(2);
+		solo.clickOnCheckBox(1);
 		assertTrue("Actionbar title is not displayed correctly!",
 				solo.searchText(deleteActionModeTitle + " 2 " + multipleItemAppendixDeleteActionMode));
 
 	}
 
+	@Device
 	public void testCancelDeleteActionMode() {
 		String delete = solo.getString(R.string.delete);
 		createProjects();
@@ -1140,6 +1149,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		assertTrue("Menu item still says \"Hide Details\"!", solo.searchText(showDetailsText));
 	}
 
+	@Device
 	public void testProjectDetailsLastAccess() {
 		String showDetailsText = solo.getString(R.string.show_details);
 		String hideDetailsText = solo.getString(R.string.hide_details);
@@ -1246,6 +1256,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 		solo.clickOnButton(buttonCloseText);
 	}
 
+	@Device
 	public void testSetDescriptionCurrentProject() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
@@ -1281,6 +1292,7 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 				.getDescription().equalsIgnoreCase(lorem));
 	}
 
+	@Device
 	public void testSetDescription() {
 		createProjects();
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());

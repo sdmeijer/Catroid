@@ -35,6 +35,8 @@ import org.catrobat.catroid.pocketcode.ProjectManager;
 import org.catrobat.catroid.pocketcode.R;
 import org.catrobat.catroid.pocketcode.common.Constants;
 import org.catrobat.catroid.pocketcode.content.Project;
+import org.catrobat.catroid.pocketcode.io.LoadProjectTask;
+import org.catrobat.catroid.pocketcode.io.LoadProjectTask.OnLoadProjectCompleteListener;
 import org.catrobat.catroid.pocketcode.io.StorageHandler;
 import org.catrobat.catroid.pocketcode.ui.BottomBar;
 import org.catrobat.catroid.pocketcode.ui.ProjectActivity;
@@ -74,7 +76,8 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 
 public class ProjectsListFragment extends SherlockListFragment implements OnProjectRenameListener,
-		OnUpdateProjectDescriptionListener, OnCopyProjectListener, OnProjectCheckedListener {
+		OnUpdateProjectDescriptionListener, OnCopyProjectListener, OnProjectCheckedListener,
+		OnLoadProjectCompleteListener {
 
 	private static final String BUNDLE_ARGUMENTS_PROJECT_DATA = "project_data";
 	private static final String SHARED_PREFERENCE_NAME = "showDetailsMyProjects";
@@ -209,21 +212,18 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				try {
-					if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).projectName,
-							getActivity(), true)) {
-						return; // error message already in ProjectManager
-								// loadProject
-					}
-				} catch (ClassCastException exception) {
-					Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
-					return;
-				}
-
-				Intent intent = new Intent(getActivity(), ProjectActivity.class);
-				getActivity().startActivity(intent);
+				LoadProjectTask loadProjectTask = new LoadProjectTask(getActivity(),
+						(adapter.getItem(position)).projectName, true);
+				loadProjectTask.setOnLoadProjectCompleteListener(parentFragment);
+				loadProjectTask.execute();
 			}
 		});
+	}
+
+	@Override
+	public void onLoadProjectSuccess() {
+		Intent intent = new Intent(getActivity(), ProjectActivity.class);
+		getActivity().startActivity(intent);
 	}
 
 	@Override
@@ -236,7 +236,10 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 
 		adapter.addCheckedProject(info.position);
 
-		if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(projectToEdit) == 0) {
+		Project currentProject = ProjectManager.getInstance().getCurrentProject();
+		if (currentProject == null) {
+			ProjectManager.getInstance().loadProject(projectToEdit.projectName, getActivity(), true);
+		} else if (currentProject.getSpriteList().indexOf(projectToEdit) == 0) {
 			return;
 		}
 
