@@ -985,6 +985,22 @@ public class ProjectActivityTest extends BaseActivityInstrumentationTestCase<Mai
 
 	}
 
+	public void testCancelDeleteLongClick() {
+
+		UiTestUtils.getIntoSpritesFromMainMenu(solo);
+
+		UiTestUtils.longClickOnTextInList(solo, FIRST_TEST_SPRITE_NAME);
+		solo.waitForText(delete);
+		solo.goBack();
+
+		UiTestUtils.openActionMode(solo, delete, R.id.delete, getActivity());
+		ArrayList<CheckBox> checkBoxList = solo.getCurrentViews(CheckBox.class);
+		for (CheckBox c : checkBoxList) {
+			assertFalse("Sprite is selected!", c.isChecked());
+		}
+
+	}
+
 	public void testRenameActionModeChecking() {
 		UiTestUtils.getIntoSpritesFromMainMenu(solo);
 		UiTestUtils.openActionMode(solo, rename, 0, getActivity());

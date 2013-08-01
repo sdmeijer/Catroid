@@ -1006,6 +1006,20 @@ public class LookFragmentTest extends BaseActivityInstrumentationTestCase<MainMe
 		checkIfNumberOfLooksIsEqual(expectedNumberOfLooks);
 	}
 
+	public void testCancelDeleteLongClick() {
+
+		UiTestUtils.longClickOnTextInList(solo, FIRST_TEST_LOOK_NAME);
+		solo.waitForText(delete);
+		solo.goBack();
+
+		UiTestUtils.openActionMode(solo, delete, R.id.delete, getActivity());
+		ArrayList<CheckBox> checkBoxList = solo.getCurrentViews(CheckBox.class);
+		for (CheckBox c : checkBoxList) {
+			assertFalse("Look is selected!", c.isChecked());
+		}
+
+	}
+
 	public void testCopyActionModeCheckingAndTitle() {
 		UiTestUtils.openActionMode(solo, copy, R.id.copy, getActivity());
 

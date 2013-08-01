@@ -569,6 +569,20 @@ public class SoundFragmentTest extends BaseActivityInstrumentationTestCase<MainM
 				solo.waitForText(SECOND_TEST_SOUND_NAME, 0, 200, false, false));
 	}
 
+	public void testCancelDeleteLongClick() {
+
+		UiTestUtils.longClickOnTextInList(solo, FIRST_TEST_SOUND_NAME);
+		solo.waitForText(delete);
+		solo.goBack();
+
+		UiTestUtils.openActionMode(solo, delete, R.id.delete, getActivity());
+		ArrayList<CheckBox> checkBoxList = solo.getCurrentViews(CheckBox.class);
+		for (CheckBox c : checkBoxList) {
+			assertFalse("Sound is selected!", c.isChecked());
+		}
+
+	}
+
 	public void testAddLookAndDeleteActionMode() {
 		String testSoundName = "testSound";
 

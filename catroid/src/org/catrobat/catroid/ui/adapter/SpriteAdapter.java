@@ -93,6 +93,7 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 	}
 
 	public void clearCheckedSprites() {
+		System.out.println("Clear sprites...");
 		checkedSprites.clear();
 	}
 
@@ -114,6 +115,7 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+		System.out.println("Get View SpriteAdapter");
 		View spriteView = convertView;
 		ViewHolder holder;
 		if (convertView == null) {
@@ -140,6 +142,7 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				System.out.println("Check changed in SpriteAdapter");
 				if (isChecked) {
 					if (selectMode == ListView.CHOICE_MODE_SINGLE) {
 						clearCheckedSprites();
