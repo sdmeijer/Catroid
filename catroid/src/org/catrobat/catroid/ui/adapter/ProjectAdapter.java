@@ -112,13 +112,11 @@ public class ProjectAdapter extends ArrayAdapter<ProjectData> {
 	}
 
 	public void clearCheckedProjects() {
-		System.out.println("Clear projects...");
 		checkedProjects.clear();
 	}
 
 	@Override
 	public View getView(final int position, View convView, ViewGroup parent) {
-		System.out.println("Get View ProjectAdapter");
 		View convertView = convView;
 		ViewHolder holder;
 		if (convertView == null) {
@@ -190,7 +188,6 @@ public class ProjectAdapter extends ArrayAdapter<ProjectData> {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				System.out.println("Check changed in ProjectAdapter");
 				if (isChecked) {
 					if (selectMode == ListView.CHOICE_MODE_SINGLE) {
 						clearCheckedProjects();
