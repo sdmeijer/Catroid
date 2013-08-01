@@ -24,6 +24,9 @@ package org.catrobat.catroid;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.FileChecksumContainer;
@@ -32,6 +35,9 @@ import org.catrobat.catroid.common.StandardProjectHandler;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.bricks.Brick;
+import org.catrobat.catroid.content.bricks.SendToPcBrick;
+import org.catrobat.catroid.io.PcConnectionManager;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.utils.Utils;
 
@@ -110,7 +116,30 @@ public class ProjectManager {
 			currentSprite = null;
 			currentScript = null;
 			Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
+			loadSendToPcBricks();
 			return true;
+		}
+	}
+
+	public void loadSendToPcBricks() {
+		List<Sprite> sprites = project.getSpriteList();
+		Iterator<Sprite> it = sprites.iterator();
+		while (it.hasNext()) {
+			Sprite sprite = it.next();
+			for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
+				Script script = sprite.getScript(i);
+				if (script.containsBrickOfType(SendToPcBrick.class)) {
+					ArrayList<Brick> bricks = script.getBrickList();
+					Iterator<Brick> itBrick = bricks.iterator();
+					while (itBrick.hasNext()) {
+						Brick brick = itBrick.next();
+						if (brick instanceof SendToPcBrick) {
+							PcConnectionManager.getInstance(null).addToConnectionRequestList((SendToPcBrick) brick);
+						}
+					}
+				}
+			}
+
 		}
 	}
 

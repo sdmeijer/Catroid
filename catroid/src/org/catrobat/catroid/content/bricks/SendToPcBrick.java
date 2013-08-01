@@ -124,7 +124,7 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 				}
 				if (sendSpinner.getSelectedItem().toString().equals(parent.getContext().getString(R.string.scan))) {
 					selectedItem = -1;
-					PcConnectionManager.getInstance(parent.getContext()).broadcast();
+					PcConnectionManager.getInstance(context).broadcast();
 				} else {
 					selectedItem = sendSpinner.getSelectedItemPosition();
 				}
@@ -142,18 +142,26 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 		sendSpinner.setFocusableInTouchMode(false);
 		sendSpinner.setFocusable(false);
 		ArrayList<String> spinnerIpList = new ArrayList<String>();
-		if (prototype) {
-			spinnerIpList.add(context.getString(R.string.new_ip_list));
-		} else {
-			if (PcConnectionManager.getInstance(context).getActualIpList().size() == 0) {
-				spinnerIpList.add(context.getString(R.string.empty));
-				spinnerIpList.add(context.getString(R.string.scan));
+		if (dataAdapter == null) {
+			if (prototype) {
+				spinnerIpList.add(context.getString(R.string.new_ip_list));
 			} else {
-				spinnerIpList.addAll(0, PcConnectionManager.getInstance(context).getActualIpList());
-				spinnerIpList.add(context.getString(R.string.scan));
+				if (PcConnectionManager.getInstance(context).getActualIpList().size() == 0) {
+					spinnerIpList.add(context.getString(R.string.empty));
+					spinnerIpList.add(context.getString(R.string.scan));
+				} else {
+					spinnerIpList.addAll(0, PcConnectionManager.getInstance(context).getActualIpList());
+					spinnerIpList.add(context.getString(R.string.scan));
+				}
+			}
+			dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerIpList);
+		} else {
+			Iterator<Entry<String, String>> it = availableIps.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<String, String> pairs = it.next();
+				dataAdapter.add(pairs.getKey());
 			}
 		}
-		dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerIpList);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sendSpinner.setAdapter(dataAdapter);
 		sendSpinner.setSelection(selectedItem);
@@ -219,32 +227,46 @@ public class SendToPcBrick extends SendBeginBrick implements Broadcast {
 		@SuppressWarnings("unchecked")
 		final HashMap<String, String> ipList = (HashMap<String, String>) ips.clone();
 		Activity activity = (Activity) context;
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (sendSpinner.getSelectedItemPosition() < (sendSpinner.getCount() - 1)) {
-					selectedItem = sendSpinner.getSelectedItemPosition();
+		if (context != null) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (sendSpinner.getSelectedItemPosition() < (sendSpinner.getCount() - 1)) {
+						selectedItem = sendSpinner.getSelectedItemPosition();
+					}
+					dataAdapter.clear();
+					Iterator<Entry<String, String>> it = ipList.entrySet().iterator();
+					while (it.hasNext()) {
+						Entry<String, String> pairs = it.next();
+						String ip = pairs.getKey();
+						dataAdapter.add(ip);
+						availableIps.put(pairs.getKey(), stripPort(pairs.getValue()));
+					}
+					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					sendSpinner.setAdapter(dataAdapter);
+					if (ipList.size() == 0) {
+						dataAdapter.add(context.getString(R.string.empty));
+					}
+					if (selectedItem != -1
+							&& !sendSpinner.getItemAtPosition(selectedItem).equals(context.getString(R.string.scan))) {
+						sendSpinner.setSelection(selectedItem);
+					}
+					dataAdapter.add(context.getString(R.string.scan));
 				}
-				dataAdapter.clear();
-				Iterator<Entry<String, String>> it = ipList.entrySet().iterator();
-				while (it.hasNext()) {
-					Entry<String, String> pairs = it.next();
-					String ip = pairs.getKey();
-					dataAdapter.add(ip);
-					availableIps.put(pairs.getKey(), stripPort(pairs.getValue()));
-				}
-				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				sendSpinner.setAdapter(dataAdapter);
-				if (ipList.size() == 0) {
-					dataAdapter.add(context.getString(R.string.empty));
-				}
-				if (selectedItem != -1
-						&& !sendSpinner.getItemAtPosition(selectedItem).equals(context.getString(R.string.scan))) {
-					sendSpinner.setSelection(selectedItem);
-				}
-				dataAdapter.add(context.getString(R.string.scan));
+			});
+		} else {
+			if (ipList.size() == 0) {
+				return;
 			}
-		});
+			Iterator<Entry<String, String>> it = ipList.entrySet().iterator();
+			availableIps = new HashMap<String, String>();
+			Entry<String, String> pairs = it.next();
+			ipToConnect = stripPort(pairs.getValue());
+			while (it.hasNext()) {
+				pairs = it.next();
+				availableIps.put(pairs.getKey(), stripPort(pairs.getValue()));
+			}
+		}
 	}
 
 	public HashMap<String, String> getIpServerList() {

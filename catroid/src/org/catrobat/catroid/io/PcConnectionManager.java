@@ -79,7 +79,9 @@ public class PcConnectionManager implements ConnectionRequest {
 
 	public void initialize() {
 		connectionList = new HashMap<String, Connection>();
-		connectionRequestList = new ArrayList<SendToPcBrick>();
+		if (connectionRequestList == null) {
+			connectionRequestList = new ArrayList<SendToPcBrick>();
+		}
 		ipRequestList = new ArrayList<String>();
 		availableIpList = new ArrayList<String>();
 	}
@@ -93,6 +95,9 @@ public class PcConnectionManager implements ConnectionRequest {
 		@Override
 		public void run() {
 			Activity activity = (Activity) context;
+			if (activity == null) {
+				return;
+			}
 			activity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {

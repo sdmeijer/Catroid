@@ -114,6 +114,7 @@ public class Connection extends Thread {
 			objectOutput = new ObjectOutputStream(output);
 		} catch (IOException e2) {
 			Log.w("Connection", "Connection to " + ip + " broke.");
+			e2.printStackTrace();
 			stopThread();
 		}
 		try {
@@ -121,6 +122,7 @@ public class Connection extends Thread {
 			objectInput = new ObjectInputStream(input);
 		} catch (IOException e) {
 			Log.w("Connection", "Connection to " + ip + " broke.");
+			e.printStackTrace();
 			stopThread();
 		}
 	}
@@ -159,7 +161,7 @@ public class Connection extends Thread {
 				showErrorDialog();
 			} else {
 				Log.w("Connection", "Connection to " + ip + " broke.");
-				connectionManager.getStageActivity().exit();
+				showErrorDialog();
 			}
 		}
 	}
@@ -194,6 +196,12 @@ public class Connection extends Thread {
 			}
 			if (objectOutput != null) {
 				objectOutput.close();
+			}
+			if (input != null) {
+				input.close();
+			}
+			if (objectInput != null) {
+				objectInput.close();
 			}
 			if (client != null) {
 				client.close();

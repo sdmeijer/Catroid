@@ -55,7 +55,9 @@ public class SendEndAction extends TemporalAction {
 		}
 
 		Connection connection = ((SendToPcBrick) sendBeginBrick).getConnection();
-		connection.addCommand(command);
+		if (connection != null) {
+			connection.addCommand(command);
+		}
 	}
 
 	public void setSendBeginBrick(SendBeginBrick sendBeginBrick) {

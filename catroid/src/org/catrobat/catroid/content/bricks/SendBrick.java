@@ -52,7 +52,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class SendBrick extends NestingBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private transient int command;
+	private int command;
 	private transient View prototypeView;
 	private transient char letter = 'x';
 	private SendBeginBrick sendBeginBrick;
@@ -64,12 +64,14 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 		this.sprite = sprite;
 		this.sendBeginBrick = beginBrick;
 		this.sendEndBrick = sendEndBrick;
+		command = 0;
 	}
 
 	public SendBrick(Sprite sprite, SendBeginBrick beginBrick) {
 		this.sprite = sprite;
 		this.sendBeginBrick = beginBrick;
 		sendBeginBrick.setSendBrick(this);
+		command = 0;
 	}
 
 	public SendBrick() {
@@ -97,8 +99,8 @@ public class SendBrick extends NestingBrick implements OnClickListener {
 			return view;
 		}
 
-		if (command == 0) {
-			command = letter;
+		if (command != 0) {
+			letter = (char) command;
 		}
 
 		view = View.inflate(context, R.layout.brick_send, null);
