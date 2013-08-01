@@ -49,8 +49,14 @@ public class IfLogicElseBrick extends NestingBrick implements AllowedAfterDeadEn
 	private static final String TAG = IfLogicElseBrick.class.getSimpleName();
 	private IfLogicBeginBrick ifBeginBrick;
 	private IfLogicEndBrick ifEndBrick;
+	private int layoutResource = R.layout.brick_if_else;
 
 	private transient IfLogicElseBrick copy;
+
+	public IfLogicElseBrick(Sprite sprite, IfLogicBeginBrick ifBeginBrick, int layoutResource) {
+		this(sprite, ifBeginBrick);
+		this.layoutResource = layoutResource;
+	}
 
 	public IfLogicElseBrick(Sprite sprite, IfLogicBeginBrick ifBeginBrick) {
 		this.sprite = sprite;
@@ -77,7 +83,7 @@ public class IfLogicElseBrick extends NestingBrick implements AllowedAfterDeadEn
 		}
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = inflater.inflate(R.layout.brick_if_else, null);
+		view = inflater.inflate(layoutResource, null);
 		view = getViewWithAlpha(alphaValue);
 
 		setCheckboxView(R.id.brick_if_else_checkbox);

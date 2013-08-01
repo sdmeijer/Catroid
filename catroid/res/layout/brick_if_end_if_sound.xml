@@ -21,7 +21,6 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,37 +28,19 @@
     android:orientation="horizontal" >
 
     <CheckBox
-        android:id="@+id/brick_if_answer_begin_checkbox"
+        android:id="@+id/brick_if_end_if_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/brick_if_answer_begin_layout"
+        android:id="@+id/brick_if_end_if_layout"
         style="@style/BrickContainer.Sound.Small" >
 
         <TextView
-            android:id="@+id/if_answer_label"
-            style="@style/BrickText.Multiple"
-            android:text="@string/brick_if_answer_begin" >
-        </TextView>
-
-        <EditText
-            android:id="@+id/brick_if_answer_begin_edit_text"
-            style="@style/BrickEditTextMultiple"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/brick_if_answer_begin_prototype_text_view"
-            style="@style/BrickPrototypeTextView" />
-
-        <TextView
-            android:id="@+id/if_answer_label_second_part"
-            style="@style/BrickText.Multiple"
-            android:paddingLeft="5dip"
-            android:text="@string/brick_if_answer_begin_second_part" >
-        </TextView>
+            android:id="@+id/brick_if_end_if_label"
+            style="@style/BrickText"
+            android:text="@string/brick_if_end" />
     </LinearLayout>
-
 </LinearLayout>

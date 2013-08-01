@@ -119,10 +119,8 @@ public class CategoryBricksFactory {
 		controlBrickList.add(new BroadcastWaitBrick(sprite, broadcastMessage));
 
 		controlBrickList.add(new NoteBrick(sprite, context.getString(R.string.brick_note_default_value)));
-		controlBrickList.add(new AskBrick(sprite, context.getString(R.string.brick_ask_default_value)));
 		controlBrickList.add(new IfLogicBeginBrick(sprite, 0));
 		controlBrickList.add(new ForeverBrick(sprite));
-		controlBrickList.add(new IfAnswerLogicBeginBrick(sprite, ""));
 		controlBrickList.add(new RepeatBrick(sprite, BrickValues.REPEAT));
 
 		return controlBrickList;
@@ -170,6 +168,9 @@ public class CategoryBricksFactory {
 		soundBrickList.add(new ChangeVolumeByNBrick(sprite, new Formula(defaultValueChangeVolumeBy)));
 
 		soundBrickList.add(new SpeakBrick(sprite, context.getString(R.string.brick_speak_default_value)));
+		soundBrickList.add(new AskBrick(sprite, context.getString(R.string.brick_ask_default_value)));
+		soundBrickList.add(new IfAnswerLogicBeginBrick(sprite, context
+				.getString(R.string.brick_if_answer_default_answer)));
 
 		return soundBrickList;
 	}

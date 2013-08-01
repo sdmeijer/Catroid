@@ -36,7 +36,7 @@
 
     <LinearLayout
         android:id="@+id/brick_ask_layout"
-        style="@style/BrickContainer.Control.Medium" >
+        style="@style/BrickContainer.Sound.Medium" >
 
         <TextView
             android:id="@+id/brick_ask_pre_text_view"
