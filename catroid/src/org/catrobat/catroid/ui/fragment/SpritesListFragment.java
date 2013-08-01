@@ -132,14 +132,12 @@ public class SpritesListFragment extends SherlockListFragment implements OnSprit
 	@Override
 	public void onStart() {
 		super.onStart();
-		System.out.println("ONSTART");
 		initListeners();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		System.out.println("ONRESUME");
 		if (actionMode != null) {
 			actionMode.finish();
 			actionMode = null;
