@@ -540,6 +540,8 @@
     <string name="formula_editor_variable_dialog_for_all_sprites">For all objects</string>
     <string name="formula_editor_variable_dialog_for_this_sprite_only">For this object only</string>
     <string name="formula_editor_variable_dialog_hint">Enter variable name</string>
+    <string name="formula_editor_variablelist_local_headline">FOR THIS OBJECT ONLY</string>
+	<string name="formula_editor_variablelist_global_headline">FOR ALL OBJECTS</string>
 
     <plurals name="formula_editor_variable_context_action_item_selected">
         <item quantity="one">Variable selected!</item>
