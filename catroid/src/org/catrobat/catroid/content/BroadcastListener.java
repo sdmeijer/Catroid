@@ -41,6 +41,10 @@ public class BroadcastListener implements EventListener {
 				handleBroadcastFromWaiterEvent(event, event.getBroadcastMessage());
 				return true;
 			}
+			if (event.getType().equals(BroadcastType.recognition)) {
+				handleRecognitionEvent(event, event.getBroadcastMessage());
+				return true;
+			}
 		}
 		return false;
 	}
@@ -49,5 +53,8 @@ public class BroadcastListener implements EventListener {
 	}
 
 	public void handleBroadcastFromWaiterEvent(BroadcastEvent event, String broadcastMessage) {
+	}
+
+	public void handleRecognitionEvent(BroadcastEvent event, String recognizedWords) {
 	}
 }

@@ -121,6 +121,7 @@ public abstract class Script implements Serializable {
 		for (Brick brick : brickList) {
 			ressources |= brick.getRequiredResources();
 		}
+		ressources |= getScriptBrick().getRequiredResources();
 		return ressources;
 	}
 
@@ -131,6 +132,9 @@ public abstract class Script implements Serializable {
 			if ((brick.getRequiredResources() & resource) > 0) {
 				resourceBrickList.add(brick);
 			}
+		}
+		if ((getScriptBrick().getRequiredResources() & resource) > 0) {
+			resourceBrickList.add(getScriptBrick());
 		}
 		return resourceBrickList;
 	}

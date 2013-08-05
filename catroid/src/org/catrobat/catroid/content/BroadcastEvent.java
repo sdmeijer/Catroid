@@ -91,6 +91,6 @@ public class BroadcastEvent extends Event {
 	}
 
 	static public enum BroadcastType {
-		broadcast, broadcastWait
+		broadcast, broadcastWait, recognition
 	}
 }

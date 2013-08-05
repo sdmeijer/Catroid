@@ -77,6 +77,7 @@ import org.catrobat.catroid.content.bricks.TurnLeftBrick;
 import org.catrobat.catroid.content.bricks.TurnRightBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
 import org.catrobat.catroid.content.bricks.WhenBrick;
+import org.catrobat.catroid.content.bricks.WhenSpeechReceiverBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
@@ -115,6 +116,8 @@ public class CategoryBricksFactory {
 		controlBrickList.add(new BroadcastReceiverBrick(sprite, broadcastMessage));
 		controlBrickList.add(new BroadcastBrick(sprite, broadcastMessage));
 		controlBrickList.add(new BroadcastWaitBrick(sprite, broadcastMessage));
+		controlBrickList.add(new WhenSpeechReceiverBrick(sprite, context
+				.getString(R.string.brick_when_speech_default_value)));
 
 		controlBrickList.add(new NoteBrick(sprite, context.getString(R.string.brick_note_default_value)));
 		controlBrickList.add(new ForeverBrick(sprite));

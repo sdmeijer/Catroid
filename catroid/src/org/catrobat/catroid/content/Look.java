@@ -55,6 +55,7 @@ public class Look extends Image {
 	protected float brightness = 1f;
 	public boolean visible = true;
 	protected Pixmap pixmap;
+	private HashMap<String, ArrayList<SequenceAction>> recognitionSequenceMap = new HashMap<String, ArrayList<SequenceAction>>();
 	private HashMap<String, ArrayList<SequenceAction>> broadcastSequenceMap = new HashMap<String, ArrayList<SequenceAction>>();
 	private HashMap<String, ArrayList<SequenceAction>> broadcastWaitSequenceMap = new HashMap<String, ArrayList<SequenceAction>>();
 	private ParallelAction whenParallelAction;
@@ -95,6 +96,11 @@ public class Look extends Image {
 			public void handleBroadcastFromWaiterEvent(BroadcastEvent event, String broadcastMessage) {
 				doHandleBroadcastFromWaiterEvent(event, broadcastMessage);
 			}
+
+			@Override
+			public void handleRecognitionEvent(BroadcastEvent event, String recognizedWords) {
+				doHandleRecognitionEvent(recognizedWords);
+			}
 		});
 	}
 
@@ -104,6 +110,7 @@ public class Look extends Image {
 		cloneLook.alpha = this.alpha;
 		cloneLook.brightness = this.brightness;
 		cloneLook.visible = this.visible;
+		cloneLook.recognitionSequenceMap = new HashMap<String, ArrayList<SequenceAction>>(this.recognitionSequenceMap);
 		cloneLook.broadcastSequenceMap = new HashMap<String, ArrayList<SequenceAction>>(this.broadcastSequenceMap);
 		cloneLook.broadcastWaitSequenceMap = new HashMap<String, ArrayList<SequenceAction>>(
 				this.broadcastWaitSequenceMap);
@@ -145,6 +152,30 @@ public class Look extends Image {
 			ArrayList<SequenceAction> actionList = new ArrayList<SequenceAction>();
 			actionList.add(action);
 			broadcastSequenceMap.put(broadcastMessage, actionList);
+		}
+	}
+
+	public void putRecognitionSequenceAction(String recognitionKeyword, SequenceAction action) {
+		if (recognitionSequenceMap.containsKey(recognitionKeyword)) {
+			recognitionSequenceMap.get(recognitionKeyword).add(action);
+		} else {
+			ArrayList<SequenceAction> actionList = new ArrayList<SequenceAction>();
+			actionList.add(action);
+			recognitionSequenceMap.put(recognitionKeyword, actionList);
+		}
+	}
+
+	public void doHandleRecognitionEvent(String recognizedWords) {
+		for (String key : recognitionSequenceMap.keySet()) {
+			if (recognizedWords.contains(key)) {
+				for (SequenceAction action : recognitionSequenceMap.get(key)) {
+					if (action.getActor() == null) {
+						addAction(action);
+					} else {
+						actionsToRestart.add(action);
+					}
+				}
+			}
 		}
 	}
 

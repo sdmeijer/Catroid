@@ -359,6 +359,7 @@
     <string name="brick_broadcast_receive">Wenn ich empfange:</string>
     <string name="brick_broadcast">Verschicke an alle:</string>
     <string name="brick_broadcast_wait">Verschicke und warte:</string>
+    <string name="brick_when_speech">Immer wenn jemand sagt:</string>
     <string name="brick_note">Notiz</string>
     <string name="brick_forever">Wiederhole fortlaufend</string>
     <string name="brick_repeat">Wiederhole</string>
@@ -378,6 +379,7 @@
     <string name="brick_variable_spinner_create_new_variable">Neu…</string>
     <string name="brick_note_default_value">"Anmerkung hier hinzufügen…" </string>
     <string name="brick_broadcast_default_value">"Nachricht 1"</string>
+    <string name="brick_when_speech_default_value">"Spring"</string>
     <!--  -->
 
 

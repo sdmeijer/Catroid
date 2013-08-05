@@ -360,6 +360,7 @@
     <string name="brick_broadcast_receive">When I receive</string>
     <string name="brick_broadcast">Broadcast</string>
     <string name="brick_broadcast_wait">Broadcast and wait</string>
+    <string name="brick_when_speech">Always when somebody says</string>
     <string name="brick_note">Note</string>
     <string name="brick_forever">Forever</string>
     <string name="brick_repeat">Repeat</string>
@@ -379,6 +380,7 @@
     <string name="brick_variable_spinner_create_new_variable">New…</string>
     <string name="brick_note_default_value">"add comment here…"</string>
     <string name="brick_broadcast_default_value">"message 1"</string>
+    <string name="brick_when_speech_default_value">"Run"</string>
     <!--  -->
 
 

@@ -25,16 +25,21 @@ package org.catrobat.catroid.stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.ScreenValues;
+import org.catrobat.catroid.content.BroadcastEvent;
+import org.catrobat.catroid.content.BroadcastEvent.BroadcastType;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.io.SoundManager;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
+import org.catrobat.catroid.utils.UtilSpeechRecognition;
+import org.catrobat.catroid.utils.UtilSpeechRecognition.SpeechRecognizeListener;
 import org.catrobat.catroid.utils.Utils;
 
 import android.content.Context;
@@ -59,7 +64,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class StageListener implements ApplicationListener {
+public class StageListener implements ApplicationListener, SpeechRecognizeListener {
 
 	private static final float DELTA_ACTIONS_DIVIDER_MAXIMUM = 50f;
 	private static final int ACTIONS_COMPUTATION_TIME_MAXIMUM = 8;
@@ -253,7 +258,7 @@ public class StageListener implements ApplicationListener {
 			prepareAutomaticScreenshotAndNoMeadiaFile();
 			saveScreenshot(thumbnail, SCREENSHOT_AUTOMATIC_FILE_NAME);
 		}
-
+		UtilSpeechRecognition.getInstance().unregisterContinuousSpeechListener(this);
 	}
 
 	@Override
@@ -549,6 +554,20 @@ public class StageListener implements ApplicationListener {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onRecognizedSpeech(String bestAnswer, ArrayList<String> allAnswerSuggestions) {
+		String allRecognizedWords = allAnswerSuggestions.toString();
+
+		BroadcastEvent recognizeEvent = new BroadcastEvent();
+		recognizeEvent.setBroadcastMessage(allRecognizedWords);
+		recognizeEvent.setType(BroadcastType.recognition);
+
+		List<Sprite> sprites = ProjectManager.getInstance().getCurrentProject().getSpriteList();
+		for (Sprite spriteOfList : sprites) {
+			spriteOfList.look.fire(recognizeEvent);
 		}
 	}
 }

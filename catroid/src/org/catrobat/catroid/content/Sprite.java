@@ -108,7 +108,11 @@ public class Sprite implements Serializable, Cloneable {
 				BroadcastScript script = (BroadcastScript) s;
 				SequenceAction action = createBroadcastScriptActionSequence(script);
 				look.putBroadcastSequenceAction(script.getBroadcastMessage(), action);
-
+			}
+			if (s instanceof RecognitionScript) {
+				RecognitionScript script = (RecognitionScript) s;
+				SequenceAction action = createRecognitionScriptActionSequence(script);
+				look.putRecognitionSequenceAction(script.getBroadcastMessage(), action);
 			}
 		}
 	}
@@ -166,6 +170,10 @@ public class Sprite implements Serializable, Cloneable {
 	}
 
 	public SequenceAction createBroadcastScriptActionSequence(BroadcastScript script) {
+		return createActionSequence(script);
+	}
+
+	public SequenceAction createRecognitionScriptActionSequence(RecognitionScript script) {
 		return createActionSequence(script);
 	}
 

@@ -30,6 +30,7 @@ import org.catrobat.catroid.speechrecognition.VoiceTriggeredRecorder.VoiceTrigge
 import org.catrobat.catroid.speechrecognition.WAVRecognizer;
 import org.catrobat.catroid.speechrecognition.WAVRecognizer.SpeechFileToTextListener;
 
+import android.media.MediaPlayer;
 import android.util.Log;
 
 public class UtilSpeechRecognition implements VoiceTriggeredRecorderListener, SpeechFileToTextListener {
@@ -40,6 +41,7 @@ public class UtilSpeechRecognition implements VoiceTriggeredRecorderListener, Sp
 	private ArrayList<String> lastAnswerSuggenstions = new ArrayList<String>();
 	private HashMap<Thread, String> runningRecognition = new HashMap<Thread, String>();
 	private VoiceTriggeredRecorder voiceRecorder = new VoiceTriggeredRecorder(this);
+	private boolean debug = false;
 
 	protected ArrayList<SpeechRecognizeListener> askerList = new ArrayList<SpeechRecognizeListener>();
 
@@ -89,8 +91,8 @@ public class UtilSpeechRecognition implements VoiceTriggeredRecorderListener, Sp
 				if (askerList.size() == 0) {
 					voiceRecorder.stopRecording();
 				}
-			} else {
-				Log.w(TAG, "Tried to remove not registered speechListener. " + asker.getClass().getSimpleName());
+			} else if (debug) {
+				Log.v(TAG, "Tried to remove not registered speechListener. " + asker.getClass().getSimpleName());
 			}
 		}
 		return;
@@ -111,6 +113,18 @@ public class UtilSpeechRecognition implements VoiceTriggeredRecorderListener, Sp
 	@Override
 	public void onSpeechFileSaved(String speechFilePath) {
 
+		if (debug) {
+			Log.v(TAG, "File" + speechFilePath + " saved, going recognizing");
+			Log.v(TAG, "playing...");
+			MediaPlayer player = new MediaPlayer();
+			try {
+				player.setDataSource(speechFilePath);
+				player.prepare();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			player.start();
+		}
 		WAVRecognizer converter = new WAVRecognizer(speechFilePath, this);
 		converter.start();
 		runningRecognition.put(converter, speechFilePath);
@@ -124,7 +138,14 @@ public class UtilSpeechRecognition implements VoiceTriggeredRecorderListener, Sp
 		}
 
 		if (matches == null || matches.size() == 0) {
+			if (debug) {
+				Log.v(TAG, "No results to File:" + speechFilePath);
+			}
 			return;
+		}
+
+		if (debug) {
+			Log.v(TAG, "File" + speechFilePath + " recognized: " + matches.toString());
 		}
 
 		ArrayList<SpeechRecognizeListener> listenerListCopy = new ArrayList<UtilSpeechRecognition.SpeechRecognizeListener>(

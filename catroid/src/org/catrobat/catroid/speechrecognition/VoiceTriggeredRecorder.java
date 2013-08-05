@@ -52,9 +52,9 @@ public class VoiceTriggeredRecorder implements microphoneListener {
 	private final int preVoiceFramesForActivityDetection = 40;
 	private final int preSilentFramesInVoiceFile = 10;
 
-	private final int maxSilentFramesToIgnore = 7;
+	private final int maxSilentFramesToIgnore = 10;
 	private final int minVoiceFrames = 8;
-	private final double silenceConfidence = 0.65d;
+	private final double silenceConfidence = 0.55d;
 
 	private int totalReadBytes = fileHeaderOffset;
 	private int ignoredFrames = 0;
@@ -158,7 +158,7 @@ public class VoiceTriggeredRecorder implements microphoneListener {
 		recordForFile = false;
 		totalReadBytes = fileHeaderOffset;
 		ignoredFrames = 0;
-		voiceDetection.setSensibility(VoiceActivityDetection.SENSIBILITY_NORMAL);
+		voiceDetection.setSensibility(VoiceActivityDetection.SENSIBILITY_LOW);
 		recordedPreFrames = 0;
 		voiceFrames = 0;
 	}

@@ -27,6 +27,7 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.ui.dialogs.StageDialog;
+import org.catrobat.catroid.utils.UtilSpeechRecognition;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		calculateScreenSizes();
 		initialize(stageListener, true);
+		UtilSpeechRecognition.getInstance().registerContinuousSpeechListener(stageListener);
 	}
 
 	@Override

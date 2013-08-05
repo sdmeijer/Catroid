@@ -55,7 +55,7 @@ public class MicrophoneGrabber extends Thread {
 	}
 
 	private MicrophoneGrabber() {
-		int recBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfiguration, audioEncoding); // need to be larger than size of a frame
+		int recBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfiguration, audioEncoding);
 		audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, sampleRate, channelConfiguration,
 				audioEncoding, recBufSize);
 		buffer = new byte[frameByteSize];
@@ -125,7 +125,6 @@ public class MicrophoneGrabber extends Thread {
 	}
 
 	public static double[] audioByteToDouble(byte[] samples) {
-
 		double[] micBufferData = new double[samples.length / bytesPerSample];
 
 		final double amplification = 1000.0;
