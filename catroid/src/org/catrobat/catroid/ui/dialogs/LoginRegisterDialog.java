@@ -41,7 +41,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -71,9 +70,20 @@ public class LoginRegisterDialog extends DialogFragment implements OnRegistratio
 		passwordEditText.setText("");
 
 		final AlertDialog loginRegisterDialog = new AlertDialog.Builder(getActivity()).setView(rootView)
-				.setTitle(getString(R.string.login_register_dialog_title))
-				.setPositiveButton(getString(R.string.login_or_register), null)
-				.setNeutralButton(getString(R.string.password_forgotten), null).create();
+				.setTitle(R.string.login_register_dialog_title)
+				.setPositiveButton(R.string.login_or_register, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						handleLoginRegisterButtonClick();
+					}
+				}).setNeutralButton(R.string.password_forgotten, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						handlePasswordForgottenButtonClick();
+					}
+				}).create();
 		loginRegisterDialog.setCanceledOnTouchOutside(true);
 
 		loginRegisterDialog.setOnShowListener(new OnShowListener() {
@@ -82,22 +92,6 @@ public class LoginRegisterDialog extends DialogFragment implements OnRegistratio
 				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
 						Context.INPUT_METHOD_SERVICE);
 				inputManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
-
-				Button loginRegisterButton = loginRegisterDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-				loginRegisterButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleLoginRegisterButtonClick();
-					}
-				});
-
-				Button passwordForgottenButton = loginRegisterDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-				passwordForgottenButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handlePasswordForgottenButtonClick();
-					}
-				});
 			}
 		});
 

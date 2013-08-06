@@ -1200,7 +1200,6 @@ public class ProjectActivityTest extends BaseActivityInstrumentationTestCase<Mai
 		// Don't use UiTestUtils.clickEnterClose(solo, 0, "text")
 		solo.clearEditText(0);
 		solo.enterText(0, text);
-		solo.goBack();
 		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(200);
 	}

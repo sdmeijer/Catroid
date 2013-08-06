@@ -82,7 +82,9 @@ public class StandardProjectHandler {
 
 		Project defaultProject = new Project(context, projectName);
 		defaultProject.setDeviceData(context); // density anywhere here
-		StorageHandler.getInstance().saveProject(defaultProject);
+		if (!StorageHandler.getInstance().saveProject(defaultProject)) {
+			throw new IOException("Error saving standard project");
+		}
 		ProjectManager.getInstance().setProject(defaultProject);
 
 		UserVariablesContainer userVariables = defaultProject.getUserVariables();
@@ -280,14 +282,14 @@ public class StandardProjectHandler {
 		return defaultProject;
 	}
 
-    public static Project createAndSaveEmptyProject(String projectName, Context context) {
-        Project emptyProject = new Project(context, projectName);
-        emptyProject.setDeviceData(context);
-        StorageHandler.getInstance().saveProject(emptyProject);
-        ProjectManager.getInstance().setProject(emptyProject);
+	public static Project createAndSaveEmptyProject(String projectName, Context context) {
+		Project emptyProject = new Project(context, projectName);
+		emptyProject.setDeviceData(context);
+		StorageHandler.getInstance().saveProject(emptyProject);
+		ProjectManager.getInstance().setProject(emptyProject);
 
-        return emptyProject;
-    }
+		return emptyProject;
+	}
 
 	private static File copyFromResourceInProject(String projectName, String directoryName, String outputName,
 			int fileId, Context context) throws IOException {

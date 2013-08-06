@@ -121,7 +121,6 @@ public class UploadDialogTest extends BaseActivityInstrumentationTestCase<MainMe
 		solo.clearEditText(0);
 		solo.enterText(0, UiTestUtils.PROJECTNAME2);
 		assertEquals("rename View is hidden.", renameView.getVisibility(), View.VISIBLE);
-		solo.goBack();
 
 		solo.clickOnButton(solo.getString(R.string.cancel_button));
 	}

@@ -233,11 +233,10 @@ public class UserConceptTest extends BaseActivityInstrumentationTestCase<MainMen
 
 	private void fillLoginDialog(boolean correct) {
 		assertNotNull("Login Dialog is not shown.", solo.getText(solo.getString(R.string.login_register_dialog_title)));
-		ArrayList<EditText> currentEditTexts = solo.getCurrentViews(EditText.class);
 		// enter a username
 		String testUser = "testUser" + System.currentTimeMillis();
-		solo.clearEditText(currentEditTexts.get(0));
-		solo.enterText(currentEditTexts.get(0), testUser);
+		solo.clearEditText(0);
+		solo.enterText(0, testUser);
 		solo.goBack();
 		// enter a password
 		String testPassword;
@@ -246,16 +245,14 @@ public class UserConceptTest extends BaseActivityInstrumentationTestCase<MainMen
 		} else {
 			testPassword = "short";
 		}
-		solo.clearEditText(currentEditTexts.get(1));
-		solo.clickOnView(currentEditTexts.get(1));
-		solo.enterText(currentEditTexts.get(1), testPassword);
+		solo.clearEditText(1);
+		solo.enterText(1, testPassword);
 
 		// set the email to use. we need a random email because the server does not allow same email with different users 
 		String testEmail = testUser + "@gmail.com";
 		Reflection.setPrivateField(ServerCalls.getInstance(), "emailForUiTests", testEmail);
 
-		int buttonId = android.R.id.button1;
-		solo.clickOnView(solo.getView(buttonId));
+		solo.clickOnButton(solo.getString(R.string.login_or_register));
 	}
 
 	private void clearSharedPreferences() {

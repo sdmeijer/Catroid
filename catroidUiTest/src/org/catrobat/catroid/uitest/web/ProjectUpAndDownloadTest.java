@@ -68,8 +68,6 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 	private String uploadDialogTitle;
 	private int serverProjectId;
 
-	private Project standardProject;
-
 	public ProjectUpAndDownloadTest() {
 		super(MainMenuActivity.class);
 	}
@@ -335,9 +333,7 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 
 	@Device
 	public void testUploadStandardProject() throws Throwable {
-		if (!createAndSaveStandardProject() || this.standardProject == null) {
-			fail("Standard project not created");
-		}
+		createAndSaveStandardProject();
 
 		setServerURLToTestUrl();
 		UiTestUtils.createValidUser(getActivity());
@@ -346,12 +342,11 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 
 		String uploadButtonText = solo.getString(R.string.upload_button);
 		assertTrue("Upload button not found within 5 secs!", solo.waitForText(uploadButtonText, 0, 5000));
-
-		solo.goBack();
-		solo.sleep(500);
+		solo.clearEditText(0);
+		solo.enterText(0, solo.getString(R.string.default_project_name));
 		solo.clickOnButton(uploadButtonText);
 
-		assertTrue("When uploading a project with the standard project name,  the error message should be shown",
+		assertTrue("When uploading a project with the standard project name, the error message should be shown",
 				solo.searchText(solo.getString(R.string.error_upload_project_with_default_name)));
 
 		solo.clickOnButton(solo.getString(R.string.close));
@@ -376,9 +371,7 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 
 	@Device
 	public void testUploadModifiedStandardProject() throws Throwable {
-		if (!createAndSaveStandardProject() || this.standardProject == null) {
-			fail("Standard project not created");
-		}
+		createAndSaveStandardProject();
 
 		setServerURLToTestUrl();
 		UiTestUtils.createValidUser(getActivity());
@@ -416,17 +409,22 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 
 	}
 
-	private boolean createAndSaveStandardProject() {
+	private void createAndSaveStandardProject() {
+		Project standardProject = null;
 		try {
 			standardProject = StandardProjectHandler.createAndSaveStandardProject(
-					solo.getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+					UiTestUtils.DEFAULT_TEST_PROJECT_NAME, getInstrumentation().getTargetContext());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			fail("Standard project not created");
+		}
+		if (standardProject == null) {
+			fail("Standard project is null");
 		}
 		ProjectManager.getInstance().setProject(standardProject);
-		StorageHandler.getInstance().saveProject(standardProject);
-		return true;
+		if (!StorageHandler.getInstance().saveProject(standardProject)) {
+			fail("Error on saving standard project");
+		}
 	}
 
 	private void createTestProject(String projectToCreate) {
@@ -438,13 +436,11 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 
 		solo.clickOnButton(solo.getString(R.string.main_menu_new));
 		solo.enterText(0, projectToCreate);
-		solo.goBack();
 		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.waitForFragmentById(R.id.fragment_sprites_list);
 
 		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
 		solo.enterText(0, "new sprite");
-		solo.goBack();
 		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(2000);
 
