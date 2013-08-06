@@ -40,7 +40,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class ProjectManager {
-	private final static ProjectManager INSTANCE = new ProjectManager();
+	private static final ProjectManager INSTANCE = new ProjectManager();
 
 	private Project project;
 	private Script currentScript;
