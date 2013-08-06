@@ -196,7 +196,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, userVariableString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(userVariableString, false);
 		assertTrue("Variable Fragment not shown", solo.waitForText(solo.getString(R.string.formula_editor_variables)));
 
@@ -312,7 +311,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString, false);
 
 		solo.waitForText(itemString);
@@ -342,7 +340,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 
 		solo.enterText(editText, itemString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString, true);
 
 		assertTrue("Variable Fragment not shown", solo.waitForText(solo.getString(R.string.formula_editor_variables)));
@@ -389,7 +386,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString, true);
 
 		solo.clickOnView(solo.getView(R.id.button_add));
@@ -397,7 +393,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString2nd);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString2nd, true);
 
 		solo.clickOnView(solo.getView(R.id.button_add));
@@ -405,7 +400,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString3rd);
-		solo.goBack();
 		solo.clickOnView(solo.getView(R.id.dialog_formula_editor_variable_name_local_variable_radio_button));
 		finishUserVariableCreationSafeButSlow(itemString3rd, true);
 
@@ -445,7 +439,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString, true);
 
 		solo.clickOnView(solo.getView(R.id.button_add));
@@ -453,7 +446,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString2nd);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString2nd, true);
 
 		solo.clickOnView(solo.getView(R.id.button_add));
@@ -461,7 +453,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 				solo.waitForText(solo.getString(R.string.formula_editor_variable_dialog_title)));
 		editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, itemString3rd);
-		solo.goBack();
 		solo.clickOnView(solo.getView(R.id.dialog_formula_editor_variable_name_local_variable_radio_button));
 		finishUserVariableCreationSafeButSlow(itemString3rd, true);
 
@@ -543,7 +534,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 
 		solo.enterText(editText, itemString);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(itemString, true);
 
 		assertTrue("Variable Fragment not shown", solo.waitForText(solo.getString(R.string.formula_editor_variables)));
@@ -561,7 +551,6 @@ public class FormulaEditorUserVariableFragmentTest extends BaseActivityInstrumen
 
 		solo.clearEditText(editText);
 		solo.enterText(editText, "var2");
-		solo.goBack();
 
 		assertTrue("Inserted variable not shown", solo.waitForText("var2"));
 

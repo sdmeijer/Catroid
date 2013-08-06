@@ -108,7 +108,6 @@ public class ChangeVariableTest extends BaseActivityInstrumentationTestCase<Main
 
 		editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 		solo.enterText(editText, secondUserVariableName);
-		solo.goBack();
 		solo.clickOnButton(solo.getString(R.string.ok));
 		assertTrue("ScriptFragment not visible", solo.waitForText(solo.getString(R.string.brick_change_variable)));
 		assertTrue("Created Variable not set in spinner", solo.searchText(secondUserVariableName));
@@ -158,7 +157,6 @@ public class ChangeVariableTest extends BaseActivityInstrumentationTestCase<Main
 		EditText editText = (EditText) solo.getView(R.id.dialog_formula_editor_variable_name_edit_text);
 
 		solo.enterText(editText, userVariableName);
-		solo.goBack();
 		finishUserVariableCreationSafeButSlow(userVariableName, true);
 
 		solo.goBack();

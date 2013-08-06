@@ -39,7 +39,6 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.test.UiThreadTest;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class UserConceptTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
@@ -206,39 +205,9 @@ public class UserConceptTest extends BaseActivityInstrumentationTestCase<MainMen
 
 	private void fillLoginDialogWithUsername(boolean correct, String username) {
 		assertNotNull("Login Dialog is not shown.", solo.getText(solo.getString(R.string.login_register_dialog_title)));
-		ArrayList<EditText> currentEditTexts = solo.getCurrentViews(EditText.class);
-		// enter a username
-		String testUser = username;
-		solo.clearEditText(currentEditTexts.get(0));
-		solo.enterText(currentEditTexts.get(0), testUser);
-		solo.goBack();
-		// enter a password
-		String testPassword;
-		if (correct) {
-			testPassword = "blubblub";
-		} else {
-			testPassword = "short";
-		}
-		solo.clearEditText(currentEditTexts.get(1));
-		solo.clickOnView(currentEditTexts.get(1));
-		solo.enterText(currentEditTexts.get(1), testPassword);
-
-		// set the email to use. we need a random email because the server does not allow same email with different users 
-		String testEmail = testUser + "@gmail.com";
-		Reflection.setPrivateField(ServerCalls.getInstance(), "emailForUiTests", testEmail);
-
-		int buttonId = android.R.id.button1;
-		solo.clickOnView(solo.getView(buttonId));
-	}
-
-	private void fillLoginDialog(boolean correct) {
-		assertNotNull("Login Dialog is not shown.", solo.getText(solo.getString(R.string.login_register_dialog_title)));
-		// enter a username
-		String testUser = "testUser" + System.currentTimeMillis();
+		solo.hideSoftKeyboard();
 		solo.clearEditText(0);
-		solo.enterText(0, testUser);
-		solo.goBack();
-		// enter a password
+		solo.enterText(0, username);
 		String testPassword;
 		if (correct) {
 			testPassword = "blubblub";
@@ -249,10 +218,14 @@ public class UserConceptTest extends BaseActivityInstrumentationTestCase<MainMen
 		solo.enterText(1, testPassword);
 
 		// set the email to use. we need a random email because the server does not allow same email with different users 
-		String testEmail = testUser + "@gmail.com";
+		String testEmail = username + "@gmail.com";
 		Reflection.setPrivateField(ServerCalls.getInstance(), "emailForUiTests", testEmail);
 
 		solo.clickOnButton(solo.getString(R.string.login_or_register));
+	}
+
+	private void fillLoginDialog(boolean correct) {
+		fillLoginDialogWithUsername(correct, "testUser" + System.currentTimeMillis());
 	}
 
 	private void clearSharedPreferences() {
