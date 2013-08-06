@@ -35,6 +35,7 @@ import org.catrobat.catroid.bluetooth.DeviceListActivity;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -267,6 +268,8 @@ public class PreStageActivity extends Activity {
 	}
 
 	//messages from Lego NXT device can be handled here
+	// TODO should be fixed - could lead to problems
+	@SuppressLint("HandlerLeak")
 	final Handler recieveHandler = new Handler() {
 		@Override
 		public void handleMessage(Message myMessage) {
