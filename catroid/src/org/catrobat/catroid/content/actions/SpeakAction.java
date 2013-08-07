@@ -77,5 +77,6 @@ public class SpeakAction extends Action {
 
 		String fileName = Utils.md5Checksum(text);
 		pathToSpeechFile = new File(Constants.TEXT_TO_SPEECH_TMP_PATH, fileName + Constants.TEXT_TO_SPEECH_EXTENSION);
+		pathToSpeechFile.mkdirs();
 	}
 }
