@@ -36,15 +36,11 @@
         android:gravity="center_vertical"
         android:visibility="gone" />
 
-    <LinearLayout
+    <org.catrobat.catroid.ui.BrickLayout
         android:id="@+id/brick_glide_to_layout"
         style="@style/BrickContainer.Motion.Medium"
         android:gravity="center_vertical"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
 
             <TextView
                 android:id="@+id/brick_glide_to_label"
@@ -68,11 +64,6 @@
                 android:id="@+id/brick_glide_to_seconds_text_view"
                 style="@style/BrickText.SingleLine" >
             </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
 
             <TextView
                 android:id="@+id/brick_glide_to_x"
@@ -109,7 +100,6 @@
                 android:maxEms="5"
                 android:inputType="number|numberDecimal|numberSigned" >
             </EditText>
-        </LinearLayout>
-    </LinearLayout>
+    </org.catrobat.catroid.ui.BrickLayout>
 
 </LinearLayout>
