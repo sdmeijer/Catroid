@@ -39,8 +39,13 @@
     <org.catrobat.catroid.ui.BrickLayout
         android:id="@+id/brick_glide_to_layout"
         style="@style/BrickContainer.Motion.Medium"
-        android:gravity="center_vertical"
-        android:orientation="vertical" >
+ 	    android:orientation="horizontal"
+ 	    android:paddingBottom="0dp"
+ 	    android:paddingTop="0dp"
+ 	    app:customPadding="@dimen/brick_flow_layout_padding"
+ 	    app:horizontalSpacing="@dimen/brick_flow_layout_spacing"
+ 	    app:verticalSpacing="@dimen/brick_flow_layout_spacing"
+ 	     >
 
             <TextView
                 android:id="@+id/brick_glide_to_label"
