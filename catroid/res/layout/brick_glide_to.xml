@@ -44,8 +44,7 @@
  	    android:paddingTop="0dp"
  	    app:customPadding="@dimen/brick_flow_layout_padding"
  	    app:horizontalSpacing="@dimen/brick_flow_layout_spacing"
- 	    app:verticalSpacing="@dimen/brick_flow_layout_spacing"
- 	     >
+ 	    app:verticalSpacing="@dimen/brick_flow_layout_spacing" >
 
             <TextView
                 android:id="@+id/brick_glide_to_label"
