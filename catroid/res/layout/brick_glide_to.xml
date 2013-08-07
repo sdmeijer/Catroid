@@ -36,11 +36,6 @@
         android:gravity="center_vertical"
         android:visibility="gone" />
 
-    <android.support.v7.widget.Space
-        android:id="@+id/space1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <org.catrobat.catroid.ui.BrickLayout
         android:id="@+id/brick_glide_to_layout"
         style="@style/BrickContainer.Motion.Medium"
@@ -108,10 +103,5 @@
                 android:inputType="number|numberDecimal|numberSigned" >
             </EditText>
     </org.catrobat.catroid.ui.BrickLayout>
-
-    <android.support.v7.widget.Space
-        android:id="@+id/space2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>
