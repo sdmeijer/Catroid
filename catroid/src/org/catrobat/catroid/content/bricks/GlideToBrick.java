@@ -29,7 +29,6 @@ import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.actions.ExtendedActions;
 import org.catrobat.catroid.formulaeditor.Formula;
-import org.catrobat.catroid.ui.BrickLayout;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import org.catrobat.catroid.utils.Utils;
 
@@ -186,7 +185,7 @@ public class GlideToBrick extends BrickBaseType implements OnClickListener, Form
 
 		if (view != null) {
 
-			BrickLayout layout = (BrickLayout) view.findViewById(R.id.brick_glide_to_layout);
+			View layout = view.findViewById(R.id.brick_glide_to_layout);
 			Drawable background = layout.getBackground();
 			background.setAlpha(alphaValue);
 

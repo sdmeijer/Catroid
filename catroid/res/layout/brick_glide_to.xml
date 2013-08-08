@@ -24,6 +24,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.catrobat.catroid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -69,6 +70,12 @@
             <TextView
                 android:id="@+id/brick_glide_to_seconds_text_view"
                 style="@style/BrickText.SingleLine" >
+            </TextView>
+            
+            <TextView
+                android:id="@+id/brick_glide_to_end_of_line"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
             </TextView>
 
             <TextView
