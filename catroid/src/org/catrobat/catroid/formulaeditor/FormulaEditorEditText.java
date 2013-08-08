@@ -165,7 +165,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public String getStringFromInternFormula() {
-		//Log.d("FOREST", "FEET.getStringFromInternFormula: " + internFormula.toString());
 		return internFormula.getExternFormulaString();
 	}
 

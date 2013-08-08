@@ -119,7 +119,6 @@ public class Formula implements Serializable {
 		if (context != null) {
 			internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		}
-		//Log.d("FOREST", "F.getStringFromInternFormula: " + internFormula.toString());
 		return internFormula.getExternFormulaString();
 	}
 

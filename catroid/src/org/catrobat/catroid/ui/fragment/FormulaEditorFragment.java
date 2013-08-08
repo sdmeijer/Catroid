@@ -441,7 +441,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 
 	public void refreshFormulaPreviewString() {
 		currentFormula.refreshTextField(brickView, formulaEditorEditText.getText().toString());
-		//Log.d("FOREST", "FEF.refreshFormulaPreviewString: " + formulaEditorEditText.getStringFromInternFormula());
 
 		updateBrickView();
 
