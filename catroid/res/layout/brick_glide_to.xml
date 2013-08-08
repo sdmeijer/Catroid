@@ -62,7 +62,6 @@
             <EditText
                 android:id="@+id/brick_glide_to_edit_text_duration"
                 style="@style/BrickEditText"
-                android:maxEms="7"
                 android:inputType="number|numberDecimal" 
                 android:layout_width="match_parent">
             </EditText>
@@ -71,14 +70,9 @@
                 android:id="@+id/brick_glide_to_seconds_text_view"
                 style="@style/BrickText.SingleLine" >
             </TextView>
-            
-            <TextView
-                android:id="@+id/brick_glide_to_end_of_line"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent">
-            </TextView>
 
             <TextView
+                app:layout_newLine="true"
                 android:id="@+id/brick_glide_to_x"
                 style="@style/BrickText.SingleLine"
                 android:text="@string/brick_glide_to_x" >
@@ -92,7 +86,6 @@
             <EditText
                 android:id="@+id/brick_glide_to_edit_text_x"
                 style="@style/BrickEditText"
-                android:maxEms="5"
                 android:inputType="number|numberDecimal|numberSigned" >
             </EditText>
 
@@ -110,7 +103,6 @@
             <EditText
                 android:id="@+id/brick_glide_to_edit_text_y"
                 style="@style/BrickEditText"
-                android:maxEms="5"
                 android:inputType="number|numberDecimal|numberSigned" >
             </EditText>
     </org.catrobat.catroid.ui.BrickLayout>

@@ -102,6 +102,7 @@ public class BrickLayout extends ViewGroup {
 			lineLengthWithSpacing = lineLength + hSpacing;
 
 			boolean newLine = lp.newLine || (modeWidth != MeasureSpec.UNSPECIFIED && lineLength > sizeWidth);
+
 			if (newLine) {
 				prevLinePosition = prevLinePosition + lineThicknessWithSpacing;
 

@@ -157,9 +157,16 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		internFormula.handleKeyInput(resource, context, userVariableName);
 		history.push(internFormula.getInternFormulaState());
+
 		updateTextAndCursorFromInternFormula();
 		setSelection(absoluteCursorPosition);
-		formulaEditorFragment.refreshFormulaPreviewString();
+
+		formulaEditorFragment.saveFormulaIfPossibleQuiet();
+	}
+
+	public String getStringFromInternFormula() {
+		//Log.d("FOREST", "FEET.getStringFromInternFormula: " + internFormula.toString());
+		return internFormula.getExternFormulaString();
 	}
 
 	public boolean hasChanges() {

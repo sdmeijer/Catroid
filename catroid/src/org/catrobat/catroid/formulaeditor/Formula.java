@@ -28,11 +28,10 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.Layout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class Formula implements Serializable {
@@ -116,43 +115,23 @@ public class Formula implements Serializable {
 		formulaTextFieldId = id;
 	}
 
-	public void refreshTextField(View view) {
-		if (formulaTextFieldId != null && formulaTree != null && view != null) {
-			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
-			if (formulaTextField == null) {
-				return;
-			}
-			internFormula.generateExternFormulaStringAndInternExternMapping(view.getContext());
-
-			formulaTextField.setText(internFormula.getExternFormulaString());
+	public String getFormulaString(Context context) {
+		if (context != null) {
+			internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		}
-
+		//Log.d("FOREST", "F.getStringFromInternFormula: " + internFormula.toString());
+		return internFormula.getExternFormulaString();
 	}
 
-	public void refreshTextField(View view, String formulaString, int position) {
+	public void refreshTextField(View view) {
+		refreshTextField(view, getFormulaString(view.getContext()));
+	}
+
+	public void refreshTextField(View view, String formulaString) {
 		if (formulaTextFieldId != null && formulaTree != null && view != null) {
 			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
-			if (formulaTextField == null) {
-				return;
-			}
-			formulaTextField.setText(formulaString);
-			Layout formulaTextFieldLayout = formulaTextField.getLayout();
-			if (position < 0 || formulaTextFieldLayout == null) {
-				return;
-			}
-			int characterCount = formulaTextFieldLayout.getLineVisibleEnd(0);
-			if (formulaString.length() > characterCount && characterCount > 0) {
-				int start = position - (characterCount / 2);
-				int end = position + (characterCount / 2) + 1;
-				if (end > formulaString.length() - 1) {
-					end = formulaString.length() - 1;
-					start = end - characterCount;
-				}
-				if (start < 0) {
-					start = 0;
-					end = characterCount;
-				}
-				formulaTextField.setText(formulaString.substring(start, end));
+			if (formulaTextField != null) {
+				formulaTextField.setText(formulaString);
 			}
 		}
 	}
@@ -167,38 +146,7 @@ public class Formula implements Serializable {
 
 		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
 
-		int width = formulaTextField.getWidth();
-		width = Math.max(width, 130);
 		formulaTextField.setBackgroundDrawable(highlightBackground);
-		formulaTextField.setWidth(width);
-	}
-
-	public void removeTextFieldHighlighting(View brickView, int orientation) {
-		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
-
-		int width = formulaTextField.getWidth();
-		formulaTextField.setBackgroundDrawable(getDefaultBackgroundRecursively(brickView, formulaTextField));
-		formulaTextField.setWidth(width);
-	}
-
-	private Drawable getDefaultBackgroundRecursively(View brickView, EditText formulaTextField) {
-		if (brickView instanceof ViewGroup) {
-			ViewGroup brickViewIterable = ((ViewGroup) brickView);
-			for (int i = 0; i < brickViewIterable.getChildCount(); ++i) {
-				View nextChild = brickViewIterable.getChildAt(i);
-				Drawable recursiveCandidate = getDefaultBackgroundRecursively(nextChild, formulaTextField);
-				if (recursiveCandidate != null) {
-					return recursiveCandidate;
-				}
-			}
-		} else if (brickView instanceof EditText && brickView != formulaTextField) {
-			Drawable candidate = brickView.getBackground();
-			if (candidate != null) {
-				return candidate;
-			}
-		}
-
-		return null;
 	}
 
 	public void prepareToRemove() {
